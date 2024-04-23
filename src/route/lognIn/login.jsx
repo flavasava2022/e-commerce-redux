@@ -3,21 +3,15 @@ import signUpPic from "../../assets/6310507.jpg";
 import { Link } from "react-router-dom";
 import googleIco from "../../assets/Icon-Google.svg";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
-
-import { useDispatch } from "react-redux";
-
 import {
-  emailSignInStart,
-  googleSignInStart,
-} from "../../store/user/user.action";
+  signInAuthWithEmailAndPassword,
+  signInWithGooglePopup,
+} from "../../utils/firebase/firebase";
 
 function LogIn() {
-  const dispatch = useDispatch();
   const onFinish = async (values) => {
-
     try {
-      dispatch(emailSignInStart(values.email, values.password));
-
+      signInAuthWithEmailAndPassword(values.email, values.password);
       // console.log(user);
     } catch (error) {
       if (error.code === "auth / invalid - credential") {
@@ -32,7 +26,7 @@ function LogIn() {
   };
 
   const logInWithGoogle = async () => {
-    dispatch(googleSignInStart());
+    signInWithGooglePopup();
   };
   return (
     <div className="flex items-center justify-start gap-6 h-[80vh] ">

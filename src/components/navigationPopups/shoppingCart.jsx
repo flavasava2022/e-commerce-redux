@@ -14,7 +14,7 @@ import {
   selectCartItems,
 } from "../../store/cart/cart.selectors";
 import { useDispatch, useSelector } from "react-redux";
-import { setOpenDrawer } from "../../store/cart/cart.action";
+import { setOpenDrawer } from "../../store/cart/cart.reducer";
 
 function ShoppingCart() {
   const openDrawer = useSelector(isOpenDrawer);
@@ -28,6 +28,7 @@ function ShoppingCart() {
       <Badge className="mx-4" count={totalCount} overflowCount={10}>
         <ShoppingOutlined
           onClick={() => {
+            console.log("nero");
             dispatch(setOpenDrawer(true));
           }}
           style={{

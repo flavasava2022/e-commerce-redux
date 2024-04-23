@@ -12,12 +12,13 @@ import { useContext, useEffect, useState } from "react";
 import QuickViewModal from "../quickViewModal/quickViewModal";
 
 import { selectCartItems } from "../../store/cart/cart.selectors";
-import { addToCart } from "../../store/cart/cart.action";
+
 import { useSelector, useDispatch } from "react-redux";
 import { compareListData } from "../../store/compare/compare.selectors";
-import { addOrRemoveDataFromCompareList } from "../../store/compare/compare.action";
+import { addOrRemoveDataFromCompareList } from "../../store/compare/compare.reducer";
 import { WishListData } from "../../store/wishlist/wishlist.selectors";
-import { addOrRemoveDataFromWishList } from "../../store/wishlist/wishlist.action";
+import { addOrRemoveDataFromWishList } from "../../store/wishlist/wishlist.reducer";
+import { addToCart } from "../../store/cart/cart.reducer";
 
 function ItemContainer({ item }) {
   const dispatch = useDispatch();
@@ -43,12 +44,12 @@ function ItemContainer({ item }) {
     if (itemWishList) {
       setWishlist(true);
     }
-  }, [item]);
+  }, [item, compareData, wishlistData]);
   const showModal = () => {
     setIsModalOpen(true);
   };
   const addToCartHandelr = () => {
-    dispatch(addToCart(cartData, item, 1));
+    dispatch(addToCart({ item: item, value: 1 }));
   };
   const [messageApi, contextHolder] = message.useMessage();
   const info = (text) => {
@@ -66,7 +67,7 @@ function ItemContainer({ item }) {
             className="icon-com"
             onClick={() => {
               setCompare(!compare);
-              dispatch(addOrRemoveDataFromCompareList(compareData, item));
+              dispatch(addOrRemoveDataFromCompareList(item));
               info(
                 `${item?.name} ${
                   !compare
@@ -80,7 +81,7 @@ function ItemContainer({ item }) {
             style={{ color: wishlist ? "#D04848" : "white" }}
             onClick={() => {
               setWishlist(!wishlist);
-              dispatch(addOrRemoveDataFromWishList(wishlistData, item));
+              dispatch(addOrRemoveDataFromWishList(item));
               info(
                 `${item?.name} ${
                   !wishlist
@@ -130,7 +131,6 @@ function ItemContainer({ item }) {
         item={item}
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
-        addToCart={addToCartHandelr}
       />
       {contextHolder}
     </div>

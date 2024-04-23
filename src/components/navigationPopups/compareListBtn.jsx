@@ -1,6 +1,6 @@
 import { Badge, Button, Dropdown, Empty } from "antd";
 import { PushpinFilled, PushpinOutlined } from "@ant-design/icons";
-import { CompareDataProvider } from "../../context/compareContext";
+
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";

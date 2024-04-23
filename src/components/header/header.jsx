@@ -1,23 +1,16 @@
-import { Layout, Drawer, Menu } from "antd";
+import { Layout, Menu } from "antd";
 import logo from "../../assets/MainLogo.png";
-import {
-  UserOutlined,
-  HeartOutlined,
-  ShoppingCartOutlined,
-  FilterOutlined,
-  LoginOutlined,
-  LogoutOutlined,
-} from "@ant-design/icons";
+import { LoginOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import WishlistBtn from "../navigationPopups/wishlistBtn";
 import CompareListBtn from "../navigationPopups/compareListBtn";
 import ShoppingCart from "../navigationPopups/shoppingCart";
 import { selectUser } from "../../store/user/user.selectors";
-import { useDispatch, useSelector } from "react-redux";
-import { signOutStart } from "../../store/user/user.action";
+import { useSelector } from "react-redux";
+import { signOutUser } from "../../utils/firebase/firebase";
+
 function Header() {
   const user = useSelector(selectUser);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { Header } = Layout;
 
@@ -44,7 +37,7 @@ function Header() {
     navigate(`/${e.key === "home" ? "" : e.key}`);
   };
   const signOutHandler = async () => {
-    dispatch(signOutStart());
+    signOutUser();
   };
   return (
     <Header className="flex items-center justify-between text-white bg-[#FFFFFF] px-[5%] h-[8vh] border-b-2">

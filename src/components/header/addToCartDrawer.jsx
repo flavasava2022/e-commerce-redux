@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   addToCartDrawer,
   removeFromCartDrawer,
-} from "../../store/cart/cart.action";
+} from "../../store/cart/cart.reducer";
 import { selectCartItems } from "../../store/cart/cart.selectors";
 function AddToCartDrawer({ quantity, item }) {
   const dispatch = useDispatch();
@@ -22,12 +22,12 @@ function AddToCartDrawer({ quantity, item }) {
   const increment = () => {
     if (value !== 10) {
       setValue(value + 1);
-      dispatch(addToCartDrawer(cartData, item, value));
+      dispatch(addToCartDrawer({ item: item, value: value }));
     }
   };
   const decrement = () => {
     setValue(value - 1);
-    dispatch(removeFromCartDrawer(cartData, item, value));
+    dispatch(removeFromCartDrawer({ item: item, value: value }));
   };
   useEffect(() => {
     setValue(quantity);

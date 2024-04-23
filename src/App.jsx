@@ -12,16 +12,31 @@ import "./App.css";
 
 import { useEffect } from "react";
 import {
-  getCurrentUser,
+  createUserDocument,
   onAuthStateChangedListner,
 } from "./utils/firebase/firebase";
-import { checkUserSession, setUser } from "./store/user/user.action";
+
 import { useDispatch } from "react-redux";
+import { setCurrentUser } from "./store/user/user.reducer";
 
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(checkUserSession());
+    const unsubscribe = onAuthStateChangedListner((user) => {
+      if (user) {
+        createUserDocument(user);
+      }
+      const pickedUser =
+        user &&
+        (({ accessToken, email, displayName }) => ({
+          accessToken,
+          email,
+          displayName,
+        }))(user);
+      dispatch(setCurrentUser(pickedUser));
+    });
+
+    return unsubscribe;
   }, []);
   const Routing = createBrowserRouter([
     {

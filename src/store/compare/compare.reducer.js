@@ -1,23 +1,32 @@
-import { CART_ACTION_TYPE, COMPARE_ACTION_TYPE } from "./compare.types";
+import { createSlice } from "@reduxjs/toolkit";
+
 
 
 const COMPARE_INITIAL_STATE = {
   compareData: [],
 };
 
-export const compareReducer = (state=COMPARE_INITIAL_STATE, action={}) => {
-  const { type, payload } = action;
+  export const addOrRemoveDataFromCompareListHelper = (compareData,item) => {
+    const found = compareData.find((element) => element._id === item._id);
+    if (found) {
+       return compareData.filter(
+        (element) => element._id !== item._id
+      );
+    } else {
+      return  [...compareData, item];
+    }
 
-  switch (type) {
-    case COMPARE_ACTION_TYPE.ADD_OR_REMOVE:
-      return {
-        ...state,
-        compareData: payload,
-      };
-      break;
 
-    default:
-      return state
-      break;
+  };
+export const compareSlice = createSlice({
+  name:'compare',
+  initialState:COMPARE_INITIAL_STATE,
+  reducers:{
+addOrRemoveDataFromCompareList(state,action){
+  state.compareData = addOrRemoveDataFromCompareListHelper(state.compareData,action.payload)
+}
   }
-};
+})
+
+export const {addOrRemoveDataFromCompareList} = compareSlice.actions
+export const compareReducer = compareSlice.reducer

@@ -8,11 +8,12 @@ import ColorBox from "./colorbox";
 import SizeBox from "./sizeBox";
 import { useDispatch, useSelector } from "react-redux";
 import { compareListData } from "../../store/compare/compare.selectors";
-import { addOrRemoveDataFromCompareList } from "../../store/compare/compare.action";
+import { addOrRemoveDataFromCompareList } from "../../store/compare/compare.reducer";
 import { WishListData } from "../../store/wishlist/wishlist.selectors";
-import { addOrRemoveDataFromWishList } from "../../store/wishlist/wishlist.action";
+import { addOrRemoveDataFromWishList } from "../../store/wishlist/wishlist.reducer";
+import { addToCart } from "../../store/cart/cart.reducer";
 
-function QuickViewModal({ item, setIsModalOpen, isModalOpen, addToCart }) {
+function QuickViewModal({ item, setIsModalOpen, isModalOpen }) {
   const [value, setValue] = useState(1);
   const [selectedBox, setSelectedBox] = useState("red");
   const [selectedSize, setSelectedSize] = useState("S");
@@ -122,7 +123,7 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen, addToCart }) {
                 className="icon-com"
                 onClick={() => {
                   setCompare(!compare);
-                  dispatch(addOrRemoveDataFromCompareList(compareData, item));
+                  dispatch(addOrRemoveDataFromCompareList(item));
                 }}
               />
 
@@ -130,7 +131,7 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen, addToCart }) {
                 style={{ color: wishlist ? "#D04848" : "white" }}
                 onClick={() => {
                   setWishlist(!wishlist);
-                  dispatch(addOrRemoveDataFromWishList(wishlistData, item));
+                  dispatch(addOrRemoveDataFromWishList(item));
                 }}
                 className="icon-com"
               />
@@ -208,7 +209,7 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen, addToCart }) {
               className=" rounded-full  p-5  h-auto w-[65%] bg-[#F3B95F] "
               type="secondary"
               onClick={() => {
-                addToCart(item, value);
+                dispatch(addToCart({ item: item, value: value }));
                 handleCancel();
               }}
             >

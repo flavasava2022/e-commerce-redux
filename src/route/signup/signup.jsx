@@ -4,19 +4,15 @@ import { Link } from "react-router-dom";
 
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 
-import { useDispatch } from "react-redux";
-
-import { signUpStart } from "../../store/user/user.action";
+import { createAuthUserWithEmailAndPassword } from "../../utils/firebase/firebase";
 function Signup() {
-  const dispatch = useDispatch();
-
   const onFinish = async (values) => {
     if (values.password === values.ConfirmPass) {
       let email = values.email;
       let password = values.password;
       let displayName = values.username;
       try {
-        dispatch(signUpStart(email, password, displayName));
+        createAuthUserWithEmailAndPassword(email, password, displayName);
       } catch (error) {
         if (error.code === "auth/email-already-in-use") {
           console.log("already in use");

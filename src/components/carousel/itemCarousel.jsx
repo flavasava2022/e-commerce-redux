@@ -12,10 +12,11 @@ import { useContext, useEffect, useState } from "react";
 
 import QuickViewModal from "../quickViewModal/quickViewModal";
 import { selectCartItems } from "../../store/cart/cart.selectors";
-import { addToCart } from "../../store/cart/cart.action";
+
 import { useSelector, useDispatch } from "react-redux";
 import { compareListData } from "../../store/compare/compare.selectors";
 import { WishListData } from "../../store/wishlist/wishlist.selectors";
+import { addToCart, setOpenDrawer } from "../../store/cart/cart.reducer";
 
 function ItemCarousel({ item }) {
   const dispatch = useDispatch();
@@ -39,13 +40,11 @@ function ItemCarousel({ item }) {
     if (itemWishList) {
       setWishlist(true);
     }
-  }, [item]);
+  }, [item, compareData, wishlistData]);
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const AddToCartHandel = () => {
-    dispatch(addToCart(cartData, item, 1));
-  };
+
   return (
     <div className=" main-container relative  bg-white p-6 text-center overflow-hidden shadow-inner	border-2 border-grey-100 w-[20%] min-w-[242px]   h-[90%] rounded-lg flex flex-col items-center gap-4 ">
       <div className="w-[60%] min-h-[60%] max-h-[60%]  ">
@@ -69,7 +68,10 @@ function ItemCarousel({ item }) {
         </Button>
         <Button
           type="primary"
-          onClick={AddToCartHandel}
+          onClick={() => {
+            dispatch(addToCart({ item: item, value: 1 }));
+            dispatch(setOpenDrawer(true));
+          }}
           className="addToCart-btn relative w-[60%] p-4 h-[50px] rounded-full mb-6"
         >
           <p className="addToCart-btn-text  w-full h-full opacity-1 items-center justify-center">
@@ -92,7 +94,6 @@ function ItemCarousel({ item }) {
         item={item}
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
-        addToCart={AddToCartHandel}
       />
     </div>
   );

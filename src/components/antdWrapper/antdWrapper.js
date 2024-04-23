@@ -1,6 +1,5 @@
 import { ConfigProvider } from "antd";
 
-import WishlistProvider from "../../context/whishlistContext";
 import { MobileHandlerProvider } from "../../context/mobileHandlerProvider";
 import App from "../../App";
 import { Provider } from "react-redux";
@@ -40,13 +39,11 @@ const AntdWrapper = () => {
       }}
     >
       <Provider store={store}>
-        <PersistGate persistor={persistor}>
-          <MobileHandlerProvider>
-            <WishlistProvider>
-              <App />
-            </WishlistProvider>
-          </MobileHandlerProvider>
-        </PersistGate>
+        {/* <PersistGate persistor={persistor}> */}
+        <MobileHandlerProvider>
+          <App />
+        </MobileHandlerProvider>
+        {/* </PersistGate> */}
       </Provider>
     </ConfigProvider>
   );

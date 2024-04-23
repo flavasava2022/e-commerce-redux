@@ -58,7 +58,7 @@ displayName,
     }
 
   }
-      return userSnapshot
+      return userDocRef
 };
 // console.log(auth)
 export const createAuthUserWithEmailAndPassword = async(email,password,name)=>{
@@ -75,7 +75,7 @@ export const createAuthUserWithEmailAndPassword = async(email,password,name)=>{
 export const  signInAuthWithEmailAndPassword=async(email,password)=>{
         if(!email||!password) return
     const response = await signInWithEmailAndPassword(auth,email,password)
-    // console.log(response)
+
     return response
 }
 

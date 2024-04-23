@@ -1,42 +1,70 @@
-import { CART_ACTION_TYPE } from "./cart.types";
-
+import { createSlice } from "@reduxjs/toolkit";
 
 const CART_INITIAL_STATE = {
   cartData: [],
   openDrawer: false,
-  totalPrice: 0,
-  totalCount: 0,
 };
 
-export const cartReducer = (state= CART_INITIAL_STATE, action = {}) => {
-  const { type, payload } = action;
-  switch (type) {
-    case CART_ACTION_TYPE.SET_OPEN_DRAWER:
-      return {
-        ...state,
-        openDrawer: payload,
-      };
-      break;
-    case CART_ACTION_TYPE.ADD_TO_CART:
-      return {
-        ...state,
-        ...payload,
-      };
-      break;
-    case CART_ACTION_TYPE.ADD_TO_CART_DRAWER:
-      return {
-        ...state,
-        ...payload,
-      };
-      break;
-    case CART_ACTION_TYPE.REMOVE_FROM_CART_DRAWER:
-      return {
-        ...state,
-        ...payload,
-      };
-      break;
-    default:
-      return state
-      break;
+export const addToCartHelper = (cartData, item, value) => {
+  const found = cartData?.find((element) => element._id === item._id);
+
+  if (found) {
+    return cartData?.map((cartItem) => {
+      if (cartItem._id === item?._id) {
+        return { ...cartItem, quantity: cartItem.quantity + value };
+      } else {
+        return cartItem;
+      }
+    });
+  } else {
+    return [...cartData, { ...item, quantity: value }];
   }
 };
+
+export const addToCartDrawerHelper = (cartData, item, value) => {
+  return cartData?.map((cartItem) => {
+    if (cartItem._id === item?._id) {
+      return { ...cartItem, quantity: value + 1 };
+    } else {
+      return cartItem;
+    }
+  });
+};
+export const removeFromCartDrawerHelper = (cartData, item, value) => {
+  if (value !== 1) {
+    return cartData.map((cartItem) => {
+      if (cartItem._id === item?._id) {
+        return { ...cartItem, quantity: value - 1 };
+      } else {
+        return cartItem;
+      }
+    });
+  } else {
+    return cartData.filter((cartItem) => cartItem._id !== item?._id);
+  }
+};
+
+export const cartSlice = createSlice({
+  name: "cart",
+  initialState: CART_INITIAL_STATE,
+  reducers: {
+    setOpenDrawer(state, action) {
+      state.openDrawer = action.payload;
+    },
+    addToCart(state, action) {
+      const { item, value } = action.payload;
+      state.cartData = addToCartHelper(state.cartData, item, value);
+    },
+    addToCartDrawer(state, action) {
+      const { item, value } = action.payload;
+      state.cartData = addToCartDrawerHelper(state.cartData, item, value);
+    },
+    removeFromCartDrawer(state, action) {
+      const { item, value } = action.payload;
+      state.cartData = removeFromCartDrawerHelper(state.cartData, item, value);
+    },
+  },
+});
+
+export const { removeFromCartDrawer,addToCartDrawer,setOpenDrawer, addToCart } = cartSlice.actions;
+export const cartReducer = cartSlice.reducer;
