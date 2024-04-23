@@ -6,7 +6,7 @@ import {
   useReducer,
   useState,
 } from "react";
-import { UserDataProvider } from "./userContext";
+
 import { getUserData, updateSpecificFields } from "../utils/firebase/firebase";
 const CompareDataProvider = createContext();
 const INITIAL_STATE = {
@@ -31,28 +31,8 @@ const compareReducer = (state, action) => {
   }
 };
 function CompareProvider({ children }) {
-  // const [compareData, setCompareData] = useState([]);
   const [{ compareData }, dispatch] = useReducer(compareReducer, INITIAL_STATE);
-  // const { user } = useContext(UserDataProvider);
-  // const getDataFromFireStore = async () => {
-  //   const response = await getUserData();
-  //   console.log(response);
-  //   setCompareData(response?.compareData);
-  // };
-  // useEffect(() => {
-  //   if (user) {
-  //     setTimeout(() => {
-  //       getDataFromFireStore();
-  //     }, 1000);
-  //   } else {
-  //     setCompareData([]);
-  //   }
-  // }, [user]);
-  // useEffect(() => {
-  //   if (user) {
-  //     updateSpecificFields("compareData", compareData);
-  //   }
-  // }, [compareData]);
+
   const addOrRemoveDataFromCompareList = (item) => {
     const found = compareData.find((element) => element._id === item._id);
     let newCompareData;
@@ -66,7 +46,7 @@ function CompareProvider({ children }) {
 
     dispatch({ type: "ADD_OR_REMOVE", payload: newCompareData });
   };
-  console.log(compareData);
+
   const value = { compareData, addOrRemoveDataFromCompareList };
   return (
     <CompareDataProvider.Provider value={value}>

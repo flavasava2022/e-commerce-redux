@@ -3,11 +3,14 @@ import { Button, Collapse, Modal, Rate } from "antd";
 import { FilterFilled, HeartFilled, UpCircleFilled } from "@ant-design/icons";
 import { useContext, useEffect, useState } from "react";
 import AddToCartInputNumber from "../addToCartInputNumber/addToCartInputNumber";
-import { CartDataProvider } from "../../context/cartContext";
-import { CompareDataProvider } from "../../context/compareContext";
-import { wishlistDataProvider } from "../../context/whishlistContext";
+
 import ColorBox from "./colorbox";
 import SizeBox from "./sizeBox";
+import { useDispatch, useSelector } from "react-redux";
+import { compareListData } from "../../store/compare/compare.selectors";
+import { addOrRemoveDataFromCompareList } from "../../store/compare/compare.action";
+import { WishListData } from "../../store/wishlist/wishlist.selectors";
+import { addOrRemoveDataFromWishList } from "../../store/wishlist/wishlist.action";
 
 function QuickViewModal({ item, setIsModalOpen, isModalOpen, addToCart }) {
   const [value, setValue] = useState(1);
@@ -23,10 +26,9 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen, addToCart }) {
     setIsModalOpen(false);
     setValue(1);
   };
-  const { compareData, addOrRemoveDataFromCompareList } =
-    useContext(CompareDataProvider);
-  const { wishlistData, addOrRemoveDataFromWishList } =
-    useContext(wishlistDataProvider);
+  const dispatch = useDispatch();
+  const compareData = useSelector(compareListData);
+  const wishlistData = useSelector(WishListData);
 
   const [compare, setCompare] = useState(false);
   const [wishlist, setWishlist] = useState(false);
@@ -120,7 +122,7 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen, addToCart }) {
                 className="icon-com"
                 onClick={() => {
                   setCompare(!compare);
-                  addOrRemoveDataFromCompareList(item);
+                  dispatch(addOrRemoveDataFromCompareList(compareData, item));
                 }}
               />
 
@@ -128,7 +130,7 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen, addToCart }) {
                 style={{ color: wishlist ? "#D04848" : "white" }}
                 onClick={() => {
                   setWishlist(!wishlist);
-                  addOrRemoveDataFromWishList(item);
+                  dispatch(addOrRemoveDataFromWishList(wishlistData, item));
                 }}
                 className="icon-com"
               />

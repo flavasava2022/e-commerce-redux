@@ -9,28 +9,18 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "antd";
-import { useContext, useEffect, useState } from "react";
-import { CartDataProvider } from "../../context/cartContext";
-import AddToCartDrawer from "./addToCartDrawer";
 import WishlistBtn from "../navigationPopups/wishlistBtn";
-import { wishlistDataProvider } from "../../context/whishlistContext";
-import { CompareDataProvider } from "../../context/compareContext";
 import CompareListBtn from "../navigationPopups/compareListBtn";
 import ShoppingCart from "../navigationPopups/shoppingCart";
-import { UserDataProvider } from "../../context/userContext";
-import { signOutUser } from "../../utils/firebase/firebase";
-import {
-  MobileHandlerContext,
-  MobileHandlerProvider,
-} from "../../context/mobileHandlerProvider";
+import { selectUser } from "../../store/user/user.selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { signOutStart } from "../../store/user/user.action";
 function Header() {
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { Header } = Layout;
-  const { user, setUser } = useContext(UserDataProvider);
-  const { isMobile } = useContext(MobileHandlerContext);
-  console.log("isMobile", isMobile);
-  // console.log(user);
+
   const items = [
     {
       label: "Home",
@@ -54,7 +44,7 @@ function Header() {
     navigate(`/${e.key === "home" ? "" : e.key}`);
   };
   const signOutHandler = async () => {
-    await signOutUser();
+    dispatch(signOutStart());
   };
   return (
     <Header className="flex items-center justify-between text-white bg-[#FFFFFF] px-[5%] h-[8vh] border-b-2">
@@ -91,15 +81,9 @@ function Header() {
         ) : (
           <LoginOutlined style={{ color: "black" }} />
         )}
-        {isMobile ? (
-          <p>fdsfdsf</p>
-        ) : (
-          <>
-            <WishlistBtn />
-            <CompareListBtn />
-            <ShoppingCart />
-          </>
-        )}
+        <WishlistBtn />
+        <CompareListBtn />
+        <ShoppingCart />
       </div>
     </Header>
   );

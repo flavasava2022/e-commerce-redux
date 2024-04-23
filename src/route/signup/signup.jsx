@@ -1,46 +1,22 @@
 import { Button, Form, Input } from "antd";
 import signUpPic from "../../assets/6310507.jpg";
 import { Link } from "react-router-dom";
-import googleIco from "../../assets/Icon-Google.svg";
-import {
-  GoogleOutlined,
-  LockOutlined,
-  MailOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import {
-  createAuthUserWithEmailAndPassword,
-  createUserDocument,
-} from "../../utils/firebase/firebase";
-import { CompareDataProvider } from "../../context/compareContext";
-import { wishlistDataProvider } from "../../context/whishlistContext";
-import { CartDataProvider } from "../../context/cartContext";
-import { useContext } from "react";
-import { UserDataProvider } from "../../context/userContext";
-import { updateProfile } from "firebase/auth";
+
+import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
+
+import { useDispatch } from "react-redux";
+
+import { signUpStart } from "../../store/user/user.action";
 function Signup() {
-  const { compareData } = useContext(CompareDataProvider);
-  const { wishlistData } = useContext(wishlistDataProvider);
-  const { cartData } = useContext(CartDataProvider);
+  const dispatch = useDispatch();
 
   const onFinish = async (values) => {
-    // console.log(values.password, values.ConfirmPass);
     if (values.password === values.ConfirmPass) {
-      // console.log("fdfsd");
-
+      let email = values.email;
+      let password = values.password;
+      let displayName = values.username;
       try {
-        const { user } = await createAuthUserWithEmailAndPassword(
-          values.email,
-          values.password,
-          values.username
-        );
-
-        await createUserDocument(user, {
-          compareData,
-          wishlistData,
-          cartData,
-          displayName: values.username,
-        });
+        dispatch(signUpStart(email, password, displayName));
       } catch (error) {
         if (error.code === "auth/email-already-in-use") {
           console.log("already in use");

@@ -10,18 +10,23 @@ import {
 } from "@ant-design/icons";
 import { useContext, useEffect, useState } from "react";
 import QuickViewModal from "../quickViewModal/quickViewModal";
-import CompareProvider, {
-  CompareDataProvider,
-} from "../../context/compareContext";
-import { wishlistDataProvider } from "../../context/whishlistContext";
-import { CartDataProvider } from "../../context/cartContext";
+
+import { selectCartItems } from "../../store/cart/cart.selectors";
+import { addToCart } from "../../store/cart/cart.action";
+import { useSelector, useDispatch } from "react-redux";
+import { compareListData } from "../../store/compare/compare.selectors";
+import { addOrRemoveDataFromCompareList } from "../../store/compare/compare.action";
+import { WishListData } from "../../store/wishlist/wishlist.selectors";
+import { addOrRemoveDataFromWishList } from "../../store/wishlist/wishlist.action";
 
 function ItemContainer({ item }) {
-  const { compareData, addOrRemoveDataFromCompareList } =
-    useContext(CompareDataProvider);
-  const { wishlistData, addOrRemoveDataFromWishList } =
-    useContext(wishlistDataProvider);
-  const { addToCart } = useContext(CartDataProvider);
+  const dispatch = useDispatch();
+  const compareData = useSelector(compareListData);
+
+  const wishlistData = useSelector(WishListData);
+
+  const cartData = useSelector(selectCartItems);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [compare, setCompare] = useState(false);
   const [wishlist, setWishlist] = useState(false);
@@ -42,8 +47,8 @@ function ItemContainer({ item }) {
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const AddToCart = () => {
-    addToCart(item, 1);
+  const addToCartHandelr = () => {
+    dispatch(addToCart(cartData, item, 1));
   };
   const [messageApi, contextHolder] = message.useMessage();
   const info = (text) => {
@@ -61,7 +66,7 @@ function ItemContainer({ item }) {
             className="icon-com"
             onClick={() => {
               setCompare(!compare);
-              addOrRemoveDataFromCompareList(item);
+              dispatch(addOrRemoveDataFromCompareList(compareData, item));
               info(
                 `${item?.name} ${
                   !compare
@@ -75,7 +80,7 @@ function ItemContainer({ item }) {
             style={{ color: wishlist ? "#D04848" : "white" }}
             onClick={() => {
               setWishlist(!wishlist);
-              addOrRemoveDataFromWishList(item);
+              dispatch(addOrRemoveDataFromWishList(wishlistData, item));
               info(
                 `${item?.name} ${
                   !wishlist
@@ -101,7 +106,7 @@ function ItemContainer({ item }) {
           </Button>
           <Button
             type="primary"
-            onClick={AddToCart}
+            onClick={addToCartHandelr}
             className="addToCart-btn relative w-[60%] p-4 h-[50px] rounded-full mb-6"
           >
             <p className="addToCart-btn-text  w-full h-full opacity-1 items-center justify-center">
@@ -125,7 +130,7 @@ function ItemContainer({ item }) {
         item={item}
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
-        addToCart={addToCart}
+        addToCart={addToCartHandelr}
       />
       {contextHolder}
     </div>

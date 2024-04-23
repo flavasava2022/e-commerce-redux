@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { CompareDataProvider } from "../../context/compareContext";
+
 import ItemContainer from "../../components/itemContainer/itemContainer";
 
 import { Table } from "antd";
+import { useSelector } from "react-redux";
+import { compareListData } from "../../store/compare/compare.selectors";
 function ComparePage() {
-  const { compareData, addOrRemoveDataFromCompareList } =
-    useContext(CompareDataProvider);
+  const compareData = useSelector(compareListData);
   const [data, setData] = useState([]);
   const [columns, setColumns] = useState([]);
   // console.log(compareData);

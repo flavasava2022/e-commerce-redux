@@ -1,11 +1,5 @@
-import {
-  Routes,
-  Route,
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import Navigation from "./route/mainLayout/mainLayout";
 import Home from "./route/home/home";
 import ComparePage from "./route/comparePage/comparePage";
 import WishList from "./route/wishList/wishlist";
@@ -15,9 +9,20 @@ import MainLayout from "./route/mainLayout/mainLayout";
 import Signup from "./route/signup/signup";
 import LogIn from "./route/lognIn/login";
 import "./App.css";
-import { MobileHandlerProvider } from "./context/mobileHandlerProvider";
+
+import { useEffect } from "react";
+import {
+  getCurrentUser,
+  onAuthStateChangedListner,
+} from "./utils/firebase/firebase";
+import { checkUserSession, setUser } from "./store/user/user.action";
+import { useDispatch } from "react-redux";
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(checkUserSession());
+  }, []);
   const Routing = createBrowserRouter([
     {
       path: "",

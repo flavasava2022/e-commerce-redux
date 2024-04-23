@@ -2,36 +2,21 @@ import { Button, Form, Input } from "antd";
 import signUpPic from "../../assets/6310507.jpg";
 import { Link } from "react-router-dom";
 import googleIco from "../../assets/Icon-Google.svg";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
+
+import { useDispatch } from "react-redux";
+
 import {
-  GoogleOutlined,
-  LockOutlined,
-  MailOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import {
-  signInWithGooglePopup,
-  createUserDocument,
-  signInAuthWithEmailAndPassword,
-} from "../../utils/firebase/firebase";
-import { CompareDataProvider } from "../../context/compareContext";
-import { useContext } from "react";
-import { wishlistDataProvider } from "../../context/whishlistContext";
-import { CartDataProvider } from "../../context/cartContext";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { UserDataProvider } from "../../context/userContext";
+  emailSignInStart,
+  googleSignInStart,
+} from "../../store/user/user.action";
+
 function LogIn() {
-  const { compareData } = useContext(CompareDataProvider);
-  const { wishlistData } = useContext(wishlistDataProvider);
-  const { cartData } = useContext(CartDataProvider);
-  const { user, setUser } = useContext(UserDataProvider);
-  // console.log(user, "user");
+  const dispatch = useDispatch();
   const onFinish = async (values) => {
-    // console.log("Success:", values);
+
     try {
-      const { user } = await signInAuthWithEmailAndPassword(
-        values.email,
-        values.password
-      );
+      dispatch(emailSignInStart(values.email, values.password));
 
       // console.log(user);
     } catch (error) {
@@ -47,9 +32,7 @@ function LogIn() {
   };
 
   const logInWithGoogle = async () => {
-    const { user } = await signInWithGooglePopup();
-
-    await createUserDocument(user, { compareData, wishlistData, cartData });
+    dispatch(googleSignInStart());
   };
   return (
     <div className="flex items-center justify-start gap-6 h-[80vh] ">

@@ -9,17 +9,20 @@ import {
   HeartFilled,
 } from "@ant-design/icons";
 import { useContext, useEffect, useState } from "react";
-import { CompareDataProvider } from "../../context/compareContext";
-import { wishlistDataProvider } from "../../context/whishlistContext";
-import { CartDataProvider } from "../../context/cartContext";
+
 import QuickViewModal from "../quickViewModal/quickViewModal";
+import { selectCartItems } from "../../store/cart/cart.selectors";
+import { addToCart } from "../../store/cart/cart.action";
+import { useSelector, useDispatch } from "react-redux";
+import { compareListData } from "../../store/compare/compare.selectors";
+import { WishListData } from "../../store/wishlist/wishlist.selectors";
 
 function ItemCarousel({ item }) {
-  const { compareData, addOrRemoveDataFromCompareList } =
-    useContext(CompareDataProvider);
-  const { wishlistData, addOrRemoveDataFromWishList } =
-    useContext(wishlistDataProvider);
-  const { addToCart } = useContext(CartDataProvider);
+  const dispatch = useDispatch();
+  const compareData = useSelector(compareListData);
+  const wishlistData = useSelector(WishListData);
+  const cartData = useSelector(selectCartItems);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [compare, setCompare] = useState(false);
   const [wishlist, setWishlist] = useState(false);
@@ -40,8 +43,8 @@ function ItemCarousel({ item }) {
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const AddToCart = () => {
-    addToCart(item, 1);
+  const AddToCartHandel = () => {
+    dispatch(addToCart(cartData, item, 1));
   };
   return (
     <div className=" main-container relative  bg-white p-6 text-center overflow-hidden shadow-inner	border-2 border-grey-100 w-[20%] min-w-[242px]   h-[90%] rounded-lg flex flex-col items-center gap-4 ">
@@ -66,7 +69,7 @@ function ItemCarousel({ item }) {
         </Button>
         <Button
           type="primary"
-          onClick={AddToCart}
+          onClick={AddToCartHandel}
           className="addToCart-btn relative w-[60%] p-4 h-[50px] rounded-full mb-6"
         >
           <p className="addToCart-btn-text  w-full h-full opacity-1 items-center justify-center">
@@ -89,7 +92,7 @@ function ItemCarousel({ item }) {
         item={item}
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
-        addToCart={addToCart}
+        addToCart={AddToCartHandel}
       />
     </div>
   );

@@ -6,22 +6,28 @@ import {
 } from "@ant-design/icons";
 import { Button, Modal, InputNumber } from "antd";
 import { useContext, useEffect, useState } from "react";
-import { CartDataProvider } from "../../context/cartContext";
+
 import "../../App.css";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addToCartDrawer,
+  removeFromCartDrawer,
+} from "../../store/cart/cart.action";
+import { selectCartItems } from "../../store/cart/cart.selectors";
 function AddToCartDrawer({ quantity, item }) {
-  // console.log(quantity);
+  const dispatch = useDispatch();
   const [value, setValue] = useState(quantity);
-  const { addToCartDrawer, removeFromCartDrawer, cartData } =
-    useContext(CartDataProvider);
+  const cartData = useSelector(selectCartItems);
+
   const increment = () => {
     if (value !== 10) {
       setValue(value + 1);
-      addToCartDrawer(item, value);
+      dispatch(addToCartDrawer(cartData, item, value));
     }
   };
   const decrement = () => {
     setValue(value - 1);
-    removeFromCartDrawer(item, value);
+    dispatch(removeFromCartDrawer(cartData, item, value));
   };
   useEffect(() => {
     setValue(quantity);

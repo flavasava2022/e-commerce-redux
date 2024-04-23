@@ -1,12 +1,11 @@
-import { Button, ConfigProvider } from "antd";
+import { ConfigProvider } from "antd";
 
-import App from "../../App";
-
-import CartProvider from "../../context/cartContext";
-import CompareProvider from "../../context/compareContext";
 import WishlistProvider from "../../context/whishlistContext";
-import UserProvider from "../../context/userContext";
 import { MobileHandlerProvider } from "../../context/mobileHandlerProvider";
+import App from "../../App";
+import { Provider } from "react-redux";
+import { persistor, store } from "../../store/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 const AntdWrapper = () => {
   //   const { i18n } = useTranslation();
@@ -40,17 +39,15 @@ const AntdWrapper = () => {
         },
       }}
     >
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
           <MobileHandlerProvider>
-      <UserProvider>
-        <CartProvider>
-          <CompareProvider>
             <WishlistProvider>
               <App />
             </WishlistProvider>
-          </CompareProvider>
-        </CartProvider>
-      </UserProvider>
-      </MobileHandlerProvider>
+          </MobileHandlerProvider>
+        </PersistGate>
+      </Provider>
     </ConfigProvider>
   );
 };

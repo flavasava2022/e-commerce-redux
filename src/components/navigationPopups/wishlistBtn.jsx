@@ -1,10 +1,10 @@
 import { Badge, Button, Dropdown, Empty } from "antd";
 import { HeartOutlined } from "@ant-design/icons";
-import { wishlistDataProvider } from "../../context/whishlistContext";
-import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { WishListData } from "../../store/wishlist/wishlist.selectors";
 function WishlistBtn() {
-  const { wishlistData } = useContext(wishlistDataProvider);
+  const wishlistData = useSelector(WishListData);
   return (
     <Dropdown
       placement="bottom"

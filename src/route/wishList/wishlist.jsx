@@ -13,9 +13,9 @@ import GridNumber from "../../components/itemsContainer/grid";
 import FilterDrawer from "../../components/itemsContainer/filterDrawer";
 import { FilterFilled } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
-import WishlistProvider, {
-  wishlistDataProvider,
-} from "../../context/whishlistContext";
+
+import { useSelector } from "react-redux";
+import { WishListData } from "../../store/wishlist/wishlist.selectors";
 function ItemsContainer() {
   let { category } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
@@ -37,7 +37,7 @@ function ItemsContainer() {
     setOpenFilterDrawer(false);
   };
 
-  const { wishlistData } = useContext(wishlistDataProvider);
+  const wishlistData = useSelector(WishListData);
   // console.log("wishlistData", wishlistData);
   useEffect(() => {
     const filteredItems = wishlistData.filter((item) => {

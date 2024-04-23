@@ -5,20 +5,30 @@ import {
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { Drawer, Badge, Empty, Button, Divider } from "antd";
-import { useContext } from "react";
-import { CartDataProvider } from "../../context/cartContext";
+
 import AddToCartDrawer from "../header/addToCartDrawer";
+import {
+  cartTotalCount,
+  cartTotalPrice,
+  isOpenDrawer,
+  selectCartItems,
+} from "../../store/cart/cart.selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { setOpenDrawer } from "../../store/cart/cart.action";
 
 function ShoppingCart() {
-  const { openDrawer, setOpenDrawer, cartData, totalPrice, totalCount } =
-    useContext(CartDataProvider);
+  const openDrawer = useSelector(isOpenDrawer);
+  const cartData = useSelector(selectCartItems);
+  const totalPrice = useSelector(cartTotalPrice);
+  const totalCount = useSelector(cartTotalCount);
+  const dispatch = useDispatch();
 
   return (
     <>
       <Badge className="mx-4" count={totalCount} overflowCount={10}>
         <ShoppingOutlined
           onClick={() => {
-            setOpenDrawer(true);
+            dispatch(setOpenDrawer(true));
           }}
           style={{
             fontSize: "23px",
@@ -30,7 +40,7 @@ function ShoppingCart() {
 
       <Drawer
         open={openDrawer}
-        onClose={() => setOpenDrawer(false)}
+        onClose={() => dispatch(setOpenDrawer(false))}
         title="SHOPPING CART"
       >
         <div className="flex flex-col gap-4 h-full">

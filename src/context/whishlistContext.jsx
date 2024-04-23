@@ -6,7 +6,7 @@ import {
   useReducer,
   useState,
 } from "react";
-import { UserDataProvider } from "./userContext";
+
 import { getUserData, updateSpecificFields } from "../utils/firebase/firebase";
 import { type } from "@testing-library/user-event/dist/type";
 const wishlistDataProvider = createContext();

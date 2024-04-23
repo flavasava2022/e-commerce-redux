@@ -3,8 +3,10 @@ import { PushpinFilled, PushpinOutlined } from "@ant-design/icons";
 import { CompareDataProvider } from "../../context/compareContext";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { compareListData } from "../../store/compare/compare.selectors";
 function CompareListBtn() {
-  const { compareData } = useContext(CompareDataProvider);
+  const compareData = useSelector(compareListData);
   return (
     <Dropdown
       placement="bottomLeft"
