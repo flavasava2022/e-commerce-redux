@@ -99,7 +99,7 @@ function Carousel({ category, Heading, text }) {
       <Link to={`/subCategories/${category}`}>
         <Button
           type="primary"
-          className="w-[10vw] p-4 h-[5vh]  flex items-center justify-center rounded-full mx-auto"
+          className="w-[10vw] p-4 h-[5vh]  flex items-center justify-center rounded-full mx-auto mt-2"
         >
           View All Products
         </Button>

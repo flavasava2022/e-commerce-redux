@@ -18,15 +18,13 @@ import { compareListData } from "../../store/compare/compare.selectors";
 import { addOrRemoveDataFromCompareList } from "../../store/compare/compare.reducer";
 import { WishListData } from "../../store/wishlist/wishlist.selectors";
 import { addOrRemoveDataFromWishList } from "../../store/wishlist/wishlist.reducer";
-import { addToCart } from "../../store/cart/cart.reducer";
+import { addToCart, setOpenDrawer } from "../../store/cart/cart.reducer";
 
 function ItemContainer({ item }) {
   const dispatch = useDispatch();
   const compareData = useSelector(compareListData);
 
   const wishlistData = useSelector(WishListData);
-
-  const cartData = useSelector(selectCartItems);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [compare, setCompare] = useState(false);
@@ -50,6 +48,7 @@ function ItemContainer({ item }) {
   };
   const addToCartHandelr = () => {
     dispatch(addToCart({ item: item, value: 1 }));
+    dispatch(setOpenDrawer(true));
   };
   const [messageApi, contextHolder] = message.useMessage();
   const info = (text) => {

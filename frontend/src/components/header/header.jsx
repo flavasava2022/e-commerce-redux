@@ -1,7 +1,7 @@
 import { Layout, Menu } from "antd";
 import logo from "../../assets/MainLogo.png";
 import { LoginOutlined, LogoutOutlined } from "@ant-design/icons";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import WishlistBtn from "../navigationPopups/wishlistBtn";
 import CompareListBtn from "../navigationPopups/compareListBtn";
 import ShoppingCart from "../navigationPopups/shoppingCart";
@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { signOutUser } from "../../utils/firebase/firebase";
 
 function Header() {
+  const { pathname } = useLocation();
   const user = useSelector(selectUser);
   const navigate = useNavigate();
   const { Header } = Layout;
@@ -55,11 +56,67 @@ function Header() {
         </Link>
       </div>
       <Menu
-        defaultSelectedKeys={["1"]}
+        defaultSelectedKeys={
+          items?.find(
+            (element) =>
+              element?.label ===
+              pathname.substring(pathname.lastIndexOf("/") + 1, pathname.length)
+          ) === ""
+            ? ["home"]
+            : items?.find(
+                (element) =>
+                  element?.label ===
+                  pathname.substring(
+                    pathname.lastIndexOf("/") + 1,
+                    pathname.length
+                  )
+              ) === undefined
+            ? []
+            : items?.find(
+                (element) =>
+                  element?.label ===
+                  pathname.substring(
+                    pathname.lastIndexOf("/") + 1,
+                    pathname.length
+                  )
+              )?.key
+        }
         mode="horizontal"
         items={items}
         className="bg-transparent border-none w-[40%] min-w-fit flex items-center justify-center"
         onClick={onClick}
+        selectedKeys={
+          items?.find(
+            (element) =>
+              element?.label ===
+              pathname.substring(pathname.lastIndexOf("/") + 1, pathname.length)
+          ) === ""
+            ? [
+                {
+                  label: "Home",
+                  key: "home",
+                },
+              ]
+            : items?.find(
+                (element) =>
+                  element?.label ===
+                  pathname.substring(
+                    pathname.lastIndexOf("/") + 1,
+                    pathname.length
+                  )
+              ) === undefined
+            ? []
+            : [
+                items?.find(
+                  (element) =>
+                    element?.label ===
+                    pathname.substring(
+                      pathname.lastIndexOf("/") + 1,
+                      pathname.length
+                    )
+                )?.key,
+              ]
+        }
       />
       <div className=" p-2 flex gap-4 text-xl items-center">
         {user ? (

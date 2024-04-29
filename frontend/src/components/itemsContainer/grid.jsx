@@ -6,16 +6,16 @@ function GridNumber({ gridColumns, isSelected, onGridChange }) {
   return (
     <div
       style={{ width: `${gridColumns * 20}px` }}
-      className={`transition-colors	 grid-container flex h-[30px] p-2 ${
+      className={`transition-colors	 grid-container flex h-[30px] px-2 ${
         !isSelected ? "border-gray-400" : "border-[#6895D2]"
-      }  border-2 bg-white items-center justify-between gap-2 rounded-md cursor-pointer`}
+      }  border-2 bg-white items-center justify-between gap-1 rounded-md cursor-pointer`}
       onClick={onGridChange}
     >
       {columns?.map((item, index) => {
         return (
           <div
             key={index}
-            className={`transition-colors		 flex w-[10px]  h-[20px] bg-[#6895D2]  ${
+            className={`transition-colors		 flex w-[6px]  h-[20px] bg-[#6895D2]  ${
               !isSelected ? "bg-gray-400" : "bg-[#6895D2]"
             } rounded-md`}
           ></div>
