@@ -8,29 +8,36 @@ import ShoppingCart from "../navigationPopups/shoppingCart";
 import { selectUser } from "../../store/user/user.selectors";
 import { useSelector } from "react-redux";
 import { signOutUser } from "../../utils/firebase/firebase";
+import LoginPopup from "../navigationPopups/loginPopup";
 
 function Header() {
   const { pathname } = useLocation();
-  const user = useSelector(selectUser);
   const navigate = useNavigate();
   const { Header } = Layout;
-
   const items = [
     {
       label: "Home",
       key: "home",
+      style: { fontSize: "18px" },
+      className: "header-menu",
     },
     {
       label: "Contact",
       key: "contact",
+      style: { fontSize: "18px" },
+      className: "header-menu",
     },
     {
       label: "About",
       key: "about",
+      style: { fontSize: "18px" },
+      className: "header-menu",
     },
     {
-      label: "Sign Up",
+      label: "Sign up",
       key: "signup",
+      style: { fontSize: "18px" },
+      className: "header-menu",
     },
   ];
   const onClick = (e) => {
@@ -41,7 +48,7 @@ function Header() {
     signOutUser();
   };
   return (
-    <Header className="flex items-center justify-between text-white bg-[#FFFFFF] px-[5%] h-[8vh] border-b-2">
+    <Header className="flex items-center justify-between text-white bg-[#FFFFFF] px-[5%] h-[8vh]  sticky-header">
       <div className="flex items-center justify-between gap-2">
         <Link to={"/"}>
           <img
@@ -85,54 +92,10 @@ function Header() {
         items={items}
         className="bg-transparent border-none w-[40%] min-w-fit flex items-center justify-center"
         onClick={onClick}
-        selectedKeys={
-          items?.find(
-            (element) =>
-              element?.label ===
-              pathname.substring(pathname.lastIndexOf("/") + 1, pathname.length)
-          ) === ""
-            ? [
-                {
-                  label: "Home",
-                  key: "home",
-                },
-              ]
-            : items?.find(
-                (element) =>
-                  element?.label ===
-                  pathname.substring(
-                    pathname.lastIndexOf("/") + 1,
-                    pathname.length
-                  )
-              ) === undefined
-            ? []
-            : [
-                items?.find(
-                  (element) =>
-                    element?.label ===
-                    pathname.substring(
-                      pathname.lastIndexOf("/") + 1,
-                      pathname.length
-                    )
-                )?.key,
-              ]
-        }
       />
       <div className=" p-2 flex gap-4 text-xl items-center">
-        {user ? (
-          <div className="flex items-center justify-between gap-1">
-            <p className="text-black">Welcome back , {user?.displayName}</p>{" "}
-            <LogoutOutlined
-              style={{ color: "black" }}
-              className="cursor-pointer"
-              onClick={signOutHandler}
-            />
-          </div>
-        ) : (
-          <LoginOutlined style={{ color: "black" }} />
-        )}
+        <LoginPopup />
         <WishlistBtn />
-        <CompareListBtn />
         <ShoppingCart />
       </div>
     </Header>

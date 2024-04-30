@@ -1,8 +1,3 @@
-import {
-  ShoppingFilled,
-  ShoppingOutlined,
-  StarFilled,
-} from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { Drawer, Badge, Empty, Button, Divider } from "antd";
 
@@ -16,6 +11,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setOpenDrawer } from "../../store/cart/cart.reducer";
 
+import { MdOutlineShoppingCart } from "react-icons/md";
+
 function ShoppingCart() {
   const openDrawer = useSelector(isOpenDrawer);
   const cartData = useSelector(selectCartItems);
@@ -26,9 +23,8 @@ function ShoppingCart() {
   return (
     <>
       <Badge className="mx-4" count={totalCount} overflowCount={10}>
-        <ShoppingOutlined
+        <MdOutlineShoppingCart
           onClick={() => {
-            console.log("nero");
             dispatch(setOpenDrawer(true));
           }}
           style={{

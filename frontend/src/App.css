@@ -89,7 +89,42 @@ transition: 0.3s ease-in-out !important;
 }
 .footer-menu{
     color: white !important;
+    transition: 0.3s ease-in !important;
 }
 .footer-menu:hover {
     color: #6895D2 !important;
+
+    
+}
+.Header-menu {
+    /* color: white !important; */
+    transition: 0.3s ease-in !important;
+}
+
+.Header-menu:hover {
+    background-color: #6895D2 !important;
+    color: white !important;
+
+}
+.header-menu:active {
+    /* color: white !important; */
+    color: #6895D2 !important;
+}
+
+.header-menu:hover {
+    color: #6895D2 !important;
+
+
+}
+.sticky-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    /* Set your desired background color */
+    z-index: 1000;
+    /* Set a high z-index value to ensure it stays on top */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Optional: Add a shadow for better visibility */
 }

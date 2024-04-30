@@ -13,7 +13,7 @@ import FilterDrawer from "../../components/itemsContainer/filterDrawer";
 import HeroSection from "../../components/heroSection/heroSection";
 function Home() {
   return (
-    <div className="bg-[#fff] p-4 hide_scroll">
+    <div className="bg-[#fff] py-4 hide_scroll">
       <div className="mx-auto">
         <Carousel
           category={"On Sale"}

@@ -18,8 +18,8 @@ function MainLayout() {
   return (
     <Layout className="scrollbar  min-h-[100vh] bg-white">
       <Header />
-      <div className=" w-[90%] mx-auto p-2 ">
-        {location === "signup" || location === "logIn" ? "" : <HeroSection />}
+      <div className=" w-[90%] mx-auto p-2 mt-[8vh]">
+        {location === "signup" ? "" : <HeroSection />}
 
         <Outlet />
       </div>

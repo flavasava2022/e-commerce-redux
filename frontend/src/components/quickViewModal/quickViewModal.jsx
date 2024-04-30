@@ -12,6 +12,7 @@ import { addOrRemoveDataFromCompareList } from "../../store/compare/compare.redu
 import { WishListData } from "../../store/wishlist/wishlist.selectors";
 import { addOrRemoveDataFromWishList } from "../../store/wishlist/wishlist.reducer";
 import { addToCart } from "../../store/cart/cart.reducer";
+import { FaHeart } from "react-icons/fa";
 
 function QuickViewModal({ item, setIsModalOpen, isModalOpen }) {
   const [value, setValue] = useState(1);
@@ -71,7 +72,7 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen }) {
   const items = [
     {
       key: "1",
-      label: <p className="text-white">Description</p>,
+      label: <p className="text-black">Description</p>,
       children: (
         <p className=" max-h-[15vh] overflow-auto scrollbar text-gray-500">
           {item?.description}
@@ -99,14 +100,6 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen }) {
           <p className="text-xl font-semibold ">{item?.name}</p>
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              {/* {item?.Sale?.available ? (
-                <p className="flex items-center border-2 border-[#6895D2] rounded-lg min-w-fit font-medium p-2 text-[#6895D2] !leading-none ">
-                  $ {item?.price - item?.Sale?.value}
-                </p>
-              ) : (
-                ""
-              )} */}
-
               <p className="flex items-center border-2 border-[#6895D2] rounded-lg min-w-fit font-medium p-2 text-[#6895D2] !leading-none ">
                 $ {item?.price}
               </p>
@@ -117,60 +110,47 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen }) {
               />
             </div>
 
-            <div className="wishList   flex  gap-6 z-50 text-white text-xl border-2 border-[#6895D2] rounded-lg px-4 py-2 ">
-              <FilterFilled
-                style={{ color: compare ? "#D04848" : "white" }}
-                className="icon-com"
-                onClick={() => {
-                  setCompare(!compare);
-                  dispatch(addOrRemoveDataFromCompareList(item));
-                }}
-              />
-
-              <HeartFilled
-                style={{ color: wishlist ? "#D04848" : "white" }}
-                onClick={() => {
-                  setWishlist(!wishlist);
-                  dispatch(addOrRemoveDataFromWishList(item));
-                }}
-                className="icon-com"
-              />
-            </div>
+            <FaHeart
+              style={{ color: wishlist ? "#D04848" : "grey", fontSize: "23px" }}
+              onClick={() => {
+                setWishlist(!wishlist);
+                dispatch(addOrRemoveDataFromWishList(item));
+              }}
+              className="icon-com"
+            />
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-[18px] ">
-              Color:{" "}
-              <span className=" capitalize font-bold">{selectedBox}</span>
-            </p>
-            <div className="flex items-center justify-start gap-2">
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-[18px] flex gap-2 items-center capitalize font-bold">
+                Color{" "}
+              </p>
               <ColorBox
-                color="red"
-                isSelected={selectedBox === "red"}
-                onClick={() => handleBoxClick("red")}
+                color="#f95a61"
+                isSelected={selectedBox === "#f95a61"}
+                onClick={() => handleBoxClick("#f95a61")}
               />
               <ColorBox
-                color="blue"
-                isSelected={selectedBox === "blue"}
-                onClick={() => handleBoxClick("blue")}
+                color="#5aa1f9"
+                isSelected={selectedBox === "#5aa1f9"}
+                onClick={() => handleBoxClick("#5aa1f9")}
               />
               <ColorBox
-                color="green"
-                isSelected={selectedBox === "green"}
-                onClick={() => handleBoxClick("green")}
+                color="#0d1824"
+                isSelected={selectedBox === "#0d1824"}
+                onClick={() => handleBoxClick("#0d1824")}
               />
               <ColorBox
                 color="yellow"
-                isSelected={selectedBox === "yellow"}
-                onClick={() => handleBoxClick("yellow")}
+                isSelected={selectedBox === "#ffffb6"}
+                onClick={() => handleBoxClick("#ffffb6")}
               />
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-[18px] ">
-              Size:{" "}
-              <span className=" capitalize font-bold">{selectedSize}</span>
-            </p>
-            <div className="flex items-center justify-start gap-2">
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-[18px] flex gap-2 items-center capitalize font-bold">
+                Size
+              </p>
               <SizeBox
                 text="S"
                 isSelected={selectedSize === "S"}
@@ -196,7 +176,8 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen }) {
           <Collapse
             items={items}
             expandIconPosition="end"
-            className="bg-[#6895D2] rounded-xl "
+            className=" rounded-xl "
+            style={{ background: "rgba(226,232,240,.6)" }}
           />
 
           <div className="flex items-center justify-evenly gap-1 w-full ">
@@ -214,14 +195,6 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen }) {
               }}
             >
               ADD TO CART
-            </Button>
-          </div>
-          <div className="flex items-center justify-around gap-2 ">
-            <Button
-              className=" rounded-full  p-4  h-auto w-full"
-              type="primary"
-            >
-              BUY IT NOW
             </Button>
           </div>
         </div>

@@ -1,6 +1,6 @@
 
 import logger from 'redux-logger'
-import { persistStore,persistReducer } from 'redux-persist'
+
 import { rootReducer } from './root-reducer'
 
 import { configureStore } from '@reduxjs/toolkit'

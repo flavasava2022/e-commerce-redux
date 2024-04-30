@@ -1,8 +1,9 @@
 import { Badge, Button, Dropdown, Empty } from "antd";
-import { HeartOutlined } from "@ant-design/icons";
+
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { WishListData } from "../../store/wishlist/wishlist.selectors";
+import { FaRegHeart } from "react-icons/fa";
 function WishlistBtn() {
   const wishlistData = useSelector(WishListData);
   return (
@@ -67,7 +68,7 @@ function WishlistBtn() {
       trigger="click"
     >
       <Badge className="mx-4" count={wishlistData?.length} overflowCount={10}>
-        <HeartOutlined
+        <FaRegHeart
           style={{
             fontSize: "23px",
             cursor: "pointer",

@@ -1,24 +1,26 @@
 import { Button, Form, Input } from "antd";
 import signUpPic from "../../assets/6310507.jpg";
-import { Link } from "react-router-dom";
 
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 
-import { createAuthUserWithEmailAndPassword } from "../../utils/firebase/firebase";
+import { setCurrentUser } from "../../store/user/user.reducer";
+import { useDispatch } from "react-redux";
+import { signUp } from "../../utils/strapi/strapi";
+import { useNavigate } from "react-router-dom";
 function Signup() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const onFinish = async (values) => {
     if (values.password === values.ConfirmPass) {
       let email = values.email;
       let password = values.password;
       let displayName = values.username;
       try {
-        createAuthUserWithEmailAndPassword(email, password, displayName);
+        const user = await signUp(email, password, displayName);
+        dispatch(setCurrentUser(user));
+        navigate("/");
       } catch (error) {
-        if (error.code === "auth/email-already-in-use") {
-          console.log("already in use");
-        } else {
-          console.log(error);
-        }
+        console.log(error.response?.data?.error?.message || error.message);
       }
     } else {
       console.log("error");
@@ -30,7 +32,9 @@ function Signup() {
   };
   return (
     <div className="flex items-center justify-start gap-6 h-[80vh] ">
-      <img src={signUpPic} alt="" className="max-h-[100%]" />
+      <div className="w-[60%]">
+        <img src={signUpPic} alt="" className="w-full object-cover" />
+      </div>
       <div className=" flex flex-col   h-full justify-center gap-2">
         <h1 className="text-[32px] font-semibold text-[#6895D2]">
           Create an account
@@ -123,17 +127,6 @@ function Signup() {
                   Create Account
                 </Button>
               </Form.Item>
-
-              <p className="text-base mt-2">
-                Already have account?{" "}
-                <Link
-                  to={"/logIn"}
-                  className=" underline
-"
-                >
-                  log in
-                </Link>
-              </p>
             </div>
           </Form>
         </div>

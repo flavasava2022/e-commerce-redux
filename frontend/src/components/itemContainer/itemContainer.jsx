@@ -19,6 +19,7 @@ import { addOrRemoveDataFromCompareList } from "../../store/compare/compare.redu
 import { WishListData } from "../../store/wishlist/wishlist.selectors";
 import { addOrRemoveDataFromWishList } from "../../store/wishlist/wishlist.reducer";
 import { addToCart, setOpenDrawer } from "../../store/cart/cart.reducer";
+import { addToBasket } from "../../store/fetchData/fetchData";
 
 function ItemContainer({ item }) {
   const dispatch = useDispatch();
@@ -47,8 +48,19 @@ function ItemContainer({ item }) {
     setIsModalOpen(true);
   };
   const addToCartHandelr = () => {
-    dispatch(addToCart({ item: item, value: 1 }));
-    dispatch(setOpenDrawer(true));
+    // dispatch(addToCart({ item: item, value: 1 }));
+    // dispatch(setOpenDrawer(true));
+    addToBasket(
+      item.name,
+      item.price,
+      "red",
+      "xl",
+      item.image,
+      "3",
+      item.description,
+      item._id,
+      "1"
+    );
   };
   const [messageApi, contextHolder] = message.useMessage();
   const info = (text) => {
