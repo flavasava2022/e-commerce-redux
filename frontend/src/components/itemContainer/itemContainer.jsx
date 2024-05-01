@@ -21,7 +21,7 @@ import { addOrRemoveDataFromWishList } from "../../store/wishlist/wishlist.reduc
 import { addToCart, setOpenDrawer } from "../../store/cart/cart.reducer";
 import { addToBasket } from "../../store/fetchData/fetchData";
 
-function ItemContainer({ item }) {
+function ItemContainer({ item, id }) {
   const dispatch = useDispatch();
   const compareData = useSelector(compareListData);
 
@@ -31,15 +31,11 @@ function ItemContainer({ item }) {
   const [compare, setCompare] = useState(false);
   const [wishlist, setWishlist] = useState(false);
   useEffect(() => {
-    const itemCompered = compareData.find(
-      (element) => element?._id === item?._id
-    );
+    const itemCompered = compareData.find((element) => element?.id === id);
     if (itemCompered) {
       setCompare(true);
     }
-    const itemWishList = wishlistData.find(
-      (element) => element?._id === item?._id
-    );
+    const itemWishList = wishlistData.find((element) => element?.id === id);
     if (itemWishList) {
       setWishlist(true);
     }
@@ -69,7 +65,14 @@ function ItemContainer({ item }) {
   return (
     <div className="main-container relative bg-white p-6 text-center overflow-hidden shadow-inner	border-1 min-w-[200px] min-h-[350px] h-[350px] rounded-lg flex flex-col items-center gap-4 border-2 border-grey cursor-pointer">
       <div className="w-[95%] min-h-[70%] max-h-[70%]  ">
-        <img src={item?.image} alt="" className="w-[100%] h-[100%]" />
+        <img
+          src={
+            `http://localhost:1337` +
+            item?.attributes?.images?.data[0]?.attributes?.url
+          }
+          alt=""
+          className="w-[100%] h-[100%]"
+        />
       </div>
       <div className=" absolute  w-full h-full  top-0 left-0 overlay-cart   opacity-0 flex flex-col items-center justify-end gap-2">
         <div className="wishList absolute top-[20px] left-[-80px] flex flex-col gap-4 z-50 text-white text-xl border-2 border-[#6895D2] rounded-lg p-2 ">
@@ -80,7 +83,7 @@ function ItemContainer({ item }) {
               setCompare(!compare);
               dispatch(addOrRemoveDataFromCompareList(item));
               info(
-                `${item?.name} ${
+                `${item.attributes?.name} ${
                   !compare
                     ? "Added To Compare Card"
                     : "Removed From Compare Card"
@@ -94,7 +97,7 @@ function ItemContainer({ item }) {
               setWishlist(!wishlist);
               dispatch(addOrRemoveDataFromWishList(item));
               info(
-                `${item?.name} ${
+                `${item.attributes?.name} ${
                   !wishlist
                     ? "Added To WishList Card"
                     : "Removed From WishList Card"
@@ -130,16 +133,17 @@ function ItemContainer({ item }) {
           </Button>
         </div>
       </div>
-      <p className="text-center">{item?.name}</p>
+      <p className="text-center">{item.attributes?.name}</p>
       <div className="flex items-center justify-between w-full mt-auto">
-        <Rate disabled defaultValue={item?.rating?.rate} />
+        <Rate disabled defaultValue={item.attributes?.rating} />
         <p className="flex items-center border-2 border-[#6895D2] rounded-lg min-w-fit font-medium p-2 text-[#6895D2] !leading-none ">
-          $ {item?.price}
+          $ {item.attributes?.price}
         </p>
       </div>
 
       <QuickViewModal
         item={item}
+        id={id}
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
       />

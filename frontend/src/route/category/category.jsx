@@ -27,12 +27,11 @@ function Category() {
     setOpenFilterDrawer(false);
   };
   const fetchData = () => {
-    fetch(
-      `https://fake-e-commerce-api.onrender.com/product/subcategory/${category}`
-    )
+    fetch(`http://localhost:1337/api/products?populate=*`)
       .then((res) => res.json())
       .then((json) => {
-        setData(json);
+        console.log(json);
+        setData(json.data);
         setLoading(false);
       });
   };
@@ -45,19 +44,19 @@ function Category() {
   // console.log(data);
   useEffect(() => {
     const filteredItems = data.filter((item) => {
-      const itemNameMatch = item?.name
+      const itemNameMatch = item.attributes?.name
         .toLowerCase()
         .includes(filterName?.toLowerCase());
       const itemPriceMatch =
         filterMaxPrice === "" ||
         filterMinPrice === "" ||
-        (item.price <= parseFloat(filterMaxPrice) &&
-          item.price >= parseFloat(filterMinPrice));
+        (item.attributes.price <= parseFloat(filterMaxPrice) &&
+          item.attributes.price >= parseFloat(filterMinPrice));
       const itemCategoryMatch =
         categoryFilter.length > 0
           ? categoryFilter.find((element) => {
               // console.log(element, item?.category);
-              return element === item?.category;
+              return element === item.attributes?.category;
             })
           : true;
       // console.log("itemCategoryMatch", itemCategoryMatch);
@@ -167,7 +166,7 @@ function Category() {
           >
             {/* Render paginated items */}
             {paginatedItems.map((item, index) => (
-              <ItemContainer item={item} key={item._id} />
+              <ItemContainer item={item} key={item.id} id={item.id} />
             ))}
           </div>
           <Pagination

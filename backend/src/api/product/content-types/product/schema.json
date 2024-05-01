@@ -12,7 +12,7 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "title": {
+    "name": {
       "type": "string",
       "required": true
     },
@@ -38,12 +38,16 @@
       "default": 0
     },
     "category": {
-      "type": "enumeration",
-      "enum": [
-        "men",
-        "women"
-      ],
-      "required": true
+      "type": "string"
+    },
+    "colors": {
+      "type": "json"
+    },
+    "sizes": {
+      "type": "json"
+    },
+    "flash_sale": {
+      "type": "boolean"
     }
   }
 }

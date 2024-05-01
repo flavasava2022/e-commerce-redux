@@ -387,6 +387,37 @@ export interface ApiCartCart extends Schema.CollectionType {
   };
 }
 
+export interface ApiCategoryCategory extends Schema.CollectionType {
+  collectionName: 'categories';
+  info: {
+    singularName: 'category';
+    pluralName: 'categories';
+    displayName: 'category';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required;
+    image: Attribute.Media;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::category.category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::category.category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiProductProduct extends Schema.CollectionType {
   collectionName: 'products';
   info: {
@@ -399,12 +430,15 @@ export interface ApiProductProduct extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    title: Attribute.String & Attribute.Required;
+    name: Attribute.String & Attribute.Required;
     images: Attribute.Media & Attribute.Required;
     price: Attribute.Decimal & Attribute.Required;
     description: Attribute.Text & Attribute.Required;
     rating: Attribute.Decimal & Attribute.Required & Attribute.DefaultTo<0>;
-    category: Attribute.Enumeration<['men', 'women']> & Attribute.Required;
+    category: Attribute.String;
+    colors: Attribute.JSON;
+    sizes: Attribute.JSON;
+    flash_sale: Attribute.Boolean;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -859,6 +893,7 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'api::cart.cart': ApiCartCart;
+      'api::category.category': ApiCategoryCategory;
       'api::product.product': ApiProductProduct;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;

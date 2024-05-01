@@ -14,10 +14,10 @@ import { addOrRemoveDataFromWishList } from "../../store/wishlist/wishlist.reduc
 import { addToCart } from "../../store/cart/cart.reducer";
 import { FaHeart } from "react-icons/fa";
 
-function QuickViewModal({ item, setIsModalOpen, isModalOpen }) {
+function QuickViewModal({ item, setIsModalOpen, isModalOpen, id }) {
   const [value, setValue] = useState(1);
-  const [selectedBox, setSelectedBox] = useState("red");
-  const [selectedSize, setSelectedSize] = useState("S");
+  const [selectedBox, setSelectedBox] = useState(item?.attributes?.colors[0]);
+  const [selectedSize, setSelectedSize] = useState(item?.attributes?.sizes[0]);
   const handleBoxClick = (index) => {
     setSelectedBox(index);
   };
@@ -35,15 +35,11 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen }) {
   const [compare, setCompare] = useState(false);
   const [wishlist, setWishlist] = useState(false);
   useEffect(() => {
-    const itemCompered = compareData.find(
-      (element) => element?._id === item?._id
-    );
+    const itemCompered = compareData.find((element) => element?.id === id);
     if (itemCompered) {
       setCompare(true);
     }
-    const itemWishList = wishlistData.find(
-      (element) => element?._id === item?._id
-    );
+    const itemWishList = wishlistData.find((element) => element?.id === id);
     if (itemWishList) {
       setWishlist(true);
     }
@@ -75,7 +71,7 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen }) {
       label: <p className="text-black">Description</p>,
       children: (
         <p className=" max-h-[15vh] overflow-auto scrollbar text-gray-500">
-          {item?.description}
+          {item.attributes?.description}
         </p>
       ),
     },
@@ -91,21 +87,24 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen }) {
       <div className="flex justify-between py-4  gap-8 max-h-[100%] min-h-[100%]">
         <div className="w-[40%] min-h-[100%] max-h-[100%]  ">
           <img
-            src={item?.image}
+            src={
+              `http://localhost:1337` +
+              item?.attributes?.images?.data[0]?.attributes?.url
+            }
             alt=""
             className="w-[100%] h-[100%] object-cover"
           />
         </div>
         <div className="px-4 py-2 w-[60%] flex flex-col h-[100%] gap-5 justify-between">
-          <p className="text-xl font-semibold ">{item?.name}</p>
+          <p className="text-xl font-semibold ">{item.attributes?.name}</p>
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <p className="flex items-center border-2 border-[#6895D2] rounded-lg min-w-fit font-medium p-2 text-[#6895D2] !leading-none ">
-                $ {item?.price}
+                $ {item.attributes?.price}
               </p>
               <Rate
                 disabled
-                defaultValue={item?.rate?.rating}
+                defaultValue={item.attributes?.rating}
                 className=" text-[28px]"
               />
             </div>
@@ -124,26 +123,15 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen }) {
               <p className="text-[18px] flex gap-2 items-center capitalize font-bold">
                 Color{" "}
               </p>
-              <ColorBox
-                color="#f95a61"
-                isSelected={selectedBox === "#f95a61"}
-                onClick={() => handleBoxClick("#f95a61")}
-              />
-              <ColorBox
-                color="#5aa1f9"
-                isSelected={selectedBox === "#5aa1f9"}
-                onClick={() => handleBoxClick("#5aa1f9")}
-              />
-              <ColorBox
-                color="#0d1824"
-                isSelected={selectedBox === "#0d1824"}
-                onClick={() => handleBoxClick("#0d1824")}
-              />
-              <ColorBox
-                color="yellow"
-                isSelected={selectedBox === "#ffffb6"}
-                onClick={() => handleBoxClick("#ffffb6")}
-              />
+              {item.attributes.colors.map((colorName, i) => {
+                return (
+                  <ColorBox
+                    color={colorName}
+                    isSelected={selectedBox === colorName}
+                    onClick={() => handleBoxClick(colorName)}
+                  />
+                );
+              })}
             </div>
           </div>
           <div className="flex flex-col gap-2">
@@ -151,26 +139,15 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen }) {
               <p className="text-[18px] flex gap-2 items-center capitalize font-bold">
                 Size
               </p>
-              <SizeBox
-                text="S"
-                isSelected={selectedSize === "S"}
-                onClick={() => handleBoxSizeClick("S")}
-              />
-              <SizeBox
-                text="M"
-                isSelected={selectedSize === "M"}
-                onClick={() => handleBoxSizeClick("M")}
-              />
-              <SizeBox
-                text="L"
-                isSelected={selectedSize === "L"}
-                onClick={() => handleBoxSizeClick("L")}
-              />
-              <SizeBox
-                text="XL"
-                isSelected={selectedSize === "XL"}
-                onClick={() => handleBoxSizeClick("XL")}
-              />
+              {item.attributes.sizes.map((sizes, i) => {
+                return (
+                  <SizeBox
+                    text={sizes}
+                    isSelected={selectedSize === sizes}
+                    onClick={() => handleBoxSizeClick(sizes)}
+                  />
+                );
+              })}
             </div>
           </div>
           <Collapse
