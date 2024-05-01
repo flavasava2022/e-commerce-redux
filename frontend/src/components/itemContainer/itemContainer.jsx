@@ -133,7 +133,7 @@ function ItemContainer({ item, id }) {
           </Button>
         </div>
       </div>
-      <p className="text-center">{item.attributes?.name}</p>
+      <p className="text-center overflow-hidden">{item.attributes?.name}</p>
       <div className="flex items-center justify-between w-full mt-auto">
         <Rate disabled defaultValue={item.attributes?.rating} />
         <p className="flex items-center border-2 border-[#6895D2] rounded-lg min-w-fit font-medium p-2 text-[#6895D2] !leading-none ">
