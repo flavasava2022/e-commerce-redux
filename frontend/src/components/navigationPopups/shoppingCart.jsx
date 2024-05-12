@@ -22,11 +22,15 @@ function ShoppingCart() {
 
   return (
     <>
-      <Badge className="mx-4" count={totalCount} overflowCount={10}>
+      <Badge
+        className="mx-4"
+        count={totalCount}
+        overflowCount={100}
+        onClick={() => {
+          dispatch(setOpenDrawer(true));
+        }}
+      >
         <MdOutlineShoppingCart
-          onClick={() => {
-            dispatch(setOpenDrawer(true));
-          }}
           style={{
             fontSize: "23px",
             cursor: "pointer",
@@ -41,35 +45,38 @@ function ShoppingCart() {
         title="SHOPPING CART"
       >
         <div className="flex flex-col gap-4 h-full">
-          <div className="p-1 max-h-[550px] min-h-[550px] overflow-y-scroll flex flex-col items-center  gap-4 hide__scroll">
+          <div className="p-1 h-[31rem] lg:h-[35rem] overflow-y-scroll flex flex-col items-center  gap-4 hide__scroll">
             {cartData?.length ? (
               cartData?.map((item) => {
                 return (
-                  <div className="w-full" key={item?._id}>
+                  <div className="w-full" key={item?.id}>
                     <div className="p-2 flex  items-center  justify-between gap-3  w-full">
                       <div className="w-[100px] h-[120px] ">
                         <img
-                          src={item?.image}
-                          alt={item?.name}
+                          src={
+                            process.env.REACT_APP_IMAGE_BASE_URL +
+                            item?.attributes?.images.data[0].attributes.url
+                          }
+                          alt={item?.attributes?.name}
                           className="w-[100%] h-[100%] object-cover"
                         />
                       </div>
                       <div className="w-[80%] flex flex-col h-[120px] gap-2 items-stretch justify-between">
                         <div className="flex items-start justify-between gap-2 ">
-                          <Link>
+                          <Link to={`../product/${item?.attributes.name}`}>
                             <p className="text-base  font-normal leading-5	">
-                              {item?.name}
+                              {item?.attributes?.name}
                             </p>
                           </Link>
                           <p className="flex items-center border-2 border-dashed border-[#6895D2] rounded-lg min-w-fit font-medium p-2 text-[#6895D2] text-[12px] !leading-none ">
-                            $ {item?.price}
+                            $ {item?.attributes?.price}
                           </p>
                         </div>
                         <div className="flex items-center justify-center w-full">
                           <AddToCartDrawer
                             quantity={item?.quantity}
                             item={item}
-                            key={`${item?._id} cart`}
+                            key={`${item?.id} cart`}
                           />
                         </div>
                       </div>
@@ -94,12 +101,16 @@ function ShoppingCart() {
             Taxes and shipping calculated at checkout
           </p>
           <div className="flex flex-col items-center justify-center gap-4 mt-auto mb-0">
-            <Button
-              className=" rounded-full w-[95%] p-4  h-auto bg-[#F3B95F]"
-              type="secondary"
-            >
-              View Cart
-            </Button>
+            <Link to={"/checkout"} className="rounded-full w-[95%]   h-auto">
+              {" "}
+              <Button
+                className=" rounded-full w-[100%] p-4  h-auto bg-[#F3B95F] "
+                type="secondary"
+              >
+                View Cart
+              </Button>
+            </Link>
+
             <Button
               className=" rounded-full w-[95%] p-4  h-auto"
               type="primary"

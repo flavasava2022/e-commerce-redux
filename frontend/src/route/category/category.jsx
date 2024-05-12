@@ -1,87 +1,79 @@
 import { useEffect, useState } from "react";
 
-import { Drawer, Input, InputNumber, Pagination, Select, Spin } from "antd";
-import GridNumber from "../../components/itemsContainer/grid";
+import { Pagination, Select, Spin } from "antd";
+import GridNumber from "./grid";
 import { FilterFilled } from "@ant-design/icons";
-import { useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ItemContainer from "../../components/itemContainer/itemContainer";
-import FilterDrawer from "../../components/itemsContainer/filterDrawer";
+import FilterDrawer from "./filterDrawer";
+import { useFetch } from "../../hooks/useFetch";
+import { FaFilter } from "react-icons/fa";
 function Category() {
-  let { category } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = Object.fromEntries(searchParams);
+  console.log(params);
+  const queryString = Array.from(searchParams.entries())
+    .map(([key, value]) => {
+      switch (key) {
+        case "sort":
+          return `${key}=${value}`;
+          break;
+        case "onSale":
+          return `filters[${key}][$eq]=${value}`;
+          break;
+        case "trends":
+          return `filters[${key}][$eq]=${value}`;
+          break;
+        case "category":
+          return value
+            ?.split("&")
+            .map((entry) => {
+              return `filters[${key}][$eq]=${entry}`;
+            })
+            .join("&");
+
+          break;
+        default:
+          break;
+      }
+    })
+    .join("&");
+  const { loading, data, error } = useFetch(
+    `/products?${queryString}&populate=*`
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [sort, setSort] = useState("A-Z");
+
   const [gridValue, setGridValue] = useState("5");
   const [paginatedItems, setPaginatedItems] = useState([]);
   const [filterName, setFilterName] = useState("");
   const [filterMaxPrice, setFilterMaxPrice] = useState(9999);
   const [filterMinPrice, setFilterMinPrice] = useState(0);
   const [openFilterDrawer, setOpenFilterDrawer] = useState(false);
-  const [categoryFilter, setCategoryFilter] = useState([]);
+
   const showFilterDrawer = () => {
     setOpenFilterDrawer(true);
   };
   const onCloseFiterDrawer = () => {
     setOpenFilterDrawer(false);
   };
-  const fetchData = () => {
-    fetch(`http://localhost:1337/api/products?populate=*`)
-      .then((res) => res.json())
-      .then((json) => {
-        console.log(json);
-        setData(json.data);
-        setLoading(false);
-      });
-  };
 
   useEffect(() => {
-    setData([]);
-    setLoading(true);
-    fetchData();
-  }, [category]);
-  // console.log(data);
-  useEffect(() => {
     const filteredItems = data.filter((item) => {
-      const itemNameMatch = item.attributes?.name
-        .toLowerCase()
-        .includes(filterName?.toLowerCase());
-      const itemPriceMatch =
-        filterMaxPrice === "" ||
-        filterMinPrice === "" ||
-        (item.attributes.price <= parseFloat(filterMaxPrice) &&
-          item.attributes.price >= parseFloat(filterMinPrice));
-      const itemCategoryMatch =
-        categoryFilter.length > 0
-          ? categoryFilter.find((element) => {
-              // console.log(element, item?.category);
-              return element === item.attributes?.category;
-            })
-          : true;
-      // console.log("itemCategoryMatch", itemCategoryMatch);
-      return itemNameMatch && itemCategoryMatch && itemPriceMatch;
-    });
-    const sortedItems = [...filteredItems].sort((a, b) => {
-      switch (sort) {
-        case "a-b":
-          return b.price - a.price;
-          break;
-        case "b-a":
-          return a.price - b.price;
-          break;
-        case "A-Z":
-          return a?.name?.toLowerCase() < b?.name?.toLowerCase() ? -1 : 1;
-          break;
-        case "Z-A":
-          return b?.name?.toLowerCase() < a?.name?.toLowerCase() ? -1 : 1;
-          break;
-        default:
-          break;
-      }
+      const isPriceInRange =
+        item?.attributes?.price <= parseFloat(filterMaxPrice) &&
+        item?.attributes?.price >= parseFloat(filterMinPrice);
+
+      const hasSelectedFilterNames =
+        filterName.length === 0 ||
+        item.attributes?.name
+          .toLowerCase()
+          .includes(filterName.toLocaleLowerCase());
+
+      return isPriceInRange && hasSelectedFilterNames;
     });
     setPaginatedItems(
-      sortedItems.slice(
+      filteredItems?.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
       )
@@ -90,23 +82,27 @@ function Category() {
     data,
     currentPage,
     itemsPerPage,
-    sort,
     filterMaxPrice,
     filterMinPrice,
     filterName,
-    categoryFilter,
   ]);
-  console.log("categoryFilter", categoryFilter);
+
   const onGridChange = (value) => {
     setGridValue(value);
   };
   const handleSortChange = (value) => {
-    setSort(value);
+    setSearchParams((prevParams) => {
+      prevParams.set("sort", value);
+
+      return prevParams;
+    });
   };
   return (
-    <div className="flex items-center justify-center gap-2 flex-col min-w-[80%]  my-4 min-h-[70vh]">
+    <div className="flex items-start justify-start gap-2 flex-col w-full mx-auto  my-4 min-h-[80vh] mt-8">
       {loading ? (
         <Spin size="large" />
+      ) : error ? (
+        <p>Failed to Fetch Data</p>
       ) : (
         <div className="w-full flex flex-col items-center gap-2 justify-between p-2 ">
           <div className="w-full flex items-center justify-between">
@@ -114,10 +110,15 @@ function Category() {
               onClick={showFilterDrawer}
               className="flex items-center justify-between gap-2 cursor-pointer"
             >
+              <FaFilter className="text-xl text-gray-400" />
               <p className="text-xl  text-gray-400">FILTER</p>{" "}
-              <FilterFilled className="text-xl text-gray-400" />
             </div>
             <div className="flex items-center justify-between gap-2">
+              <GridNumber
+                gridColumns={"2"}
+                isSelected={gridValue === "2"}
+                onGridChange={() => onGridChange("2")}
+              />
               <GridNumber
                 gridColumns={"3"}
                 isSelected={gridValue === "3"}
@@ -135,7 +136,7 @@ function Category() {
               />
             </div>
             <Select
-              defaultValue={sort}
+              defaultValue={"name:asc"}
               style={{
                 width: 120,
               }}
@@ -143,38 +144,39 @@ function Category() {
               options={[
                 {
                   label: " A-Z",
-                  value: "A-Z",
+                  value: "name:asc",
                 },
                 {
                   label: "Z-A",
-                  value: "Z-A",
+                  value: "name:desc",
                 },
                 {
                   label: "low to high",
-                  value: "b-a",
+                  value: "price:asc",
                 },
                 {
                   label: "high to low",
-                  value: "a-b",
+                  value: "price:desc",
                 },
               ]}
             />
           </div>
           <div
-            className="grid items-center  justify-center   gap-6 itemsContainer w-full my-4"
+            className=" ease-in duration-500 grid items-center  justify-center   gap-6 itemsContainer w-full my-4"
             style={{ gridTemplateColumns: `repeat(${gridValue}, 1fr)` }}
           >
             {/* Render paginated items */}
-            {paginatedItems.map((item, index) => (
+            {paginatedItems?.map((item, index) => (
               <ItemContainer item={item} key={item.id} id={item.id} />
             ))}
           </div>
           <Pagination
             defaultCurrent={1}
-            total={data.length}
+            total={data?.length}
             onChange={(page) => setCurrentPage(page)}
             hideOnSinglePage={true}
-            className="mt-2"
+            className="mt-4"
+            size="large"
           />
         </div>
       )}
@@ -188,7 +190,8 @@ function Category() {
         filterMinPrice={filterMinPrice}
         filterName={filterName}
         setFilterName={setFilterName}
-        setCategoryFilter={setCategoryFilter}
+        setSearchParams={setSearchParams}
+        searchParams={searchParams}
       />
     </div>
   );

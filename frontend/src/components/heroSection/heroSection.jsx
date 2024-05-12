@@ -1,31 +1,22 @@
-import { Menu } from "antd";
+import { useMediaQuery } from "react-responsive";
 import banner1 from "../../assets/banner1.jpg";
 import banner2 from "../../assets/banner2.jpg";
 import banner3 from "../../assets/banner3.jpg";
-import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { getAllCategories } from "../../store/category/categories.reducer";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  categoriesArray,
-  categoriesArrayError,
-  categoriesArrayIsLoading,
-} from "../../store/category/categories.selectors";
+import { useState } from "react";
 
 function HeroSection() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const [currentSlide, setCurrentSlide] = useState(0);
-
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-width: 1024px)",
+  });
   const changePic = (num) => {
     setCurrentSlide(num);
   };
 
   return (
-    <div className="flex items-center h-[40vh] mt-4 w-full">
-      <div className=" relative   flex items-center h-[40vh] rounded-xl w-[100%] justify-center">
-        <div className="absolute flex items-center justify-between gap-4 bottom-[20%] left-[45%] z-50 ">
+    <div className="flex items-center h-[15rem] lg:h-[30rem] mt-4 w-full">
+      <div className=" relative   flex items-center h-[15rem] lg:h-[30rem] rounded-xl w-[100%] justify-center">
+        <div className="absolute flex items-center justify-between gap-4 bottom-[20%] mx-auto z-50 ">
           <span
             className={`bullet w-[25px] h-1 ${
               currentSlide === 0 ? "bg-red-500" : "bg-white"
@@ -45,15 +36,19 @@ function HeroSection() {
             onClick={() => changePic(2)}
           ></span>
         </div>
-        <div className=" relative flex overflow-hidden  w-full h-[40vh] rounded-xl  justify-center">
+        <div className=" relative flex overflow-hidden  w-full h-[15rem] lg:h-[30rem] rounded-xl  justify-center">
           <div
-            className={`absolute   w-[100%] h-[40vh] picHolder rounded-xl`}
-            style={{ transform: `translateY(-${currentSlide * 40}vh` }}
+            className={`absolute   w-[100%] h-[15rem] lg:h-[30rem] picHolder rounded-xl`}
+            style={{
+              transform: `translateY(-${
+                currentSlide * (isDesktopOrLaptop ? 30 : 15)
+              }rem`,
+            }}
           >
             <img
               src={banner1}
               alt=""
-              className="picHolder  w-full h-full rounded-xl object-cover"
+              className="picHolder  w-full h-full rounded-xl  object-cover"
             />
             <img
               src={banner2}

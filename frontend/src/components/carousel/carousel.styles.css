@@ -22,3 +22,18 @@ background: rgba(255, 255, 255, 0.82);
     -webkit-backdrop-filter: blur(50px);
     border: 1px solid rgba(255, 255, 255, 1);
 }
+.category-container {
+    transition: 0.3s ease-in;
+    cursor: pointer;
+}
+.category-container:hover {
+    background-color: #D04848;
+}
+
+.category-container:hover .category-logo {
+    color: white !important;
+}
+
+.category-container:hover .category-text {
+    color: white !important;
+}

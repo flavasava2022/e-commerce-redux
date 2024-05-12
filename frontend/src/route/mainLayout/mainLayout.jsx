@@ -1,31 +1,54 @@
-import { useState } from "react";
-import { Menu, Layout } from "antd";
-import { Breadcrumb } from "antd";
+import { Affix, Layout } from "antd";
+
 import Header from "../../components/header/header";
 import "../../App.css";
 
-import { Outlet, Link, useLocation } from "react-router-dom";
-import HeroSection from "../../components/heroSection/heroSection";
-import Footer from "../../components/footer/footer";
+import { Outlet, useLocation } from "react-router-dom";
 
-function MainLayout() {
+import Footer from "../../components/footer/footer";
+import ShoppingCart from "../../components/navigationPopups/shoppingCart";
+import WishlistBtn from "../../components/navigationPopups/wishlistBtn";
+import LoginPopup from "../../components/navigationPopups/loginPopup";
+import { useMediaQuery } from "react-responsive";
+import { useEffect } from "react";
+function ScrollToTop() {
   const { pathname } = useLocation();
-  const location = pathname?.substring(
-    pathname?.lastIndexOf("/") + 1,
-    pathname?.length
-  );
-  console.log(location);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+function MainLayout() {
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-width: 1024px)",
+  });
+
   return (
-    <Layout className="scrollbar  min-h-[100vh] bg-white">
+    <Layout className=" relative scrollbar  min-h-[100vh] bg-white">
+      <ScrollToTop />
+      {!isDesktopOrLaptop ? (
+        <div className="shadow-inner fixed bottom-0 w-full p-5 flex gap-4 text-xl items-center justify-evenly bg-white z-30">
+          <LoginPopup />
+          <WishlistBtn />
+          <ShoppingCart />
+        </div>
+      ) : (
+        ""
+      )}
+
       <Header />
       <div className=" w-[90%] mx-auto p-2 mt-[8vh]">
-        {location === "signup" ? "" : <HeroSection />}
-
         <Outlet />
       </div>
-      <div className="mt-auto mb-0">
-        <Footer />
-      </div>
+      {isDesktopOrLaptop ? (
+        <div className="mt-auto mb-0">
+          <Footer />
+        </div>
+      ) : (
+        ""
+      )}
     </Layout>
   );
 }

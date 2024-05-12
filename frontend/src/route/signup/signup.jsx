@@ -19,6 +19,7 @@ function Signup() {
         const user = await signUp(email, password, displayName);
         dispatch(setCurrentUser(user));
         navigate("/");
+        console.log(user);
       } catch (error) {
         console.log(error.response?.data?.error?.message || error.message);
       }

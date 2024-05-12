@@ -1,47 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { addDataToCart, getCartData, removeDataFromCart } from "./cart.actions";
 
 const CART_INITIAL_STATE = {
   cartData: [],
   openDrawer: false,
-};
-
-export const addToCartHelper = (cartData, item, value) => {
-  const found = cartData?.find((element) => element._id === item._id);
-
-  if (found) {
-    return cartData?.map((cartItem) => {
-      if (cartItem._id === item?._id) {
-        return { ...cartItem, quantity: cartItem.quantity + value };
-      } else {
-        return cartItem;
-      }
-    });
-  } else {
-    return [...cartData, { ...item, quantity: value }];
-  }
-};
-
-export const addToCartDrawerHelper = (cartData, item, value) => {
-  return cartData?.map((cartItem) => {
-    if (cartItem._id === item?._id) {
-      return { ...cartItem, quantity: value + 1 };
-    } else {
-      return cartItem;
-    }
-  });
-};
-export const removeFromCartDrawerHelper = (cartData, item, value) => {
-  if (value !== 1) {
-    return cartData.map((cartItem) => {
-      if (cartItem._id === item?._id) {
-        return { ...cartItem, quantity: value - 1 };
-      } else {
-        return cartItem;
-      }
-    });
-  } else {
-    return cartData.filter((cartItem) => cartItem._id !== item?._id);
-  }
+  isLoadingCart: false,
+  errorFetchCart: false,
+  isLoadingEditProducts: null,
+  errorEditData: false,
 };
 
 export const cartSlice = createSlice({
@@ -51,20 +17,46 @@ export const cartSlice = createSlice({
     setOpenDrawer(state, action) {
       state.openDrawer = action.payload;
     },
-    addToCart(state, action) {
-      const { item, value } = action.payload;
-      state.cartData = addToCartHelper(state.cartData, item, value);
-    },
-    addToCartDrawer(state, action) {
-      const { item, value } = action.payload;
-      state.cartData = addToCartDrawerHelper(state.cartData, item, value);
-    },
-    removeFromCartDrawer(state, action) {
-      const { item, value } = action.payload;
-      state.cartData = removeFromCartDrawerHelper(state.cartData, item, value);
-    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getCartData.fulfilled, (state, action) => {
+        state.cartData = action.payload;
+        state.isLoadingCart = false;
+        state.errorFetchCart = false;
+      })
+      .addCase(getCartData.pending, (state, action) => {
+        state.isLoadingCart = true;
+      })
+      .addCase(getCartData.rejected, (state, action) => {
+        state.isLoadingCart = false;
+        state.errorFetchCart = action?.error?.message;
+      })
+      .addCase(addDataToCart.pending, (state, action) => {
+        state.isLoadingEditProducts = true;
+      })
+      .addCase(addDataToCart.fulfilled, (state, action) => {
+        state.cartData = action?.payload;
+        state.isLoadingEditProducts = false;
+        state.errorEditData = false;
+      })
+      .addCase(addDataToCart.rejected, (state, action) => {
+        state.isLoadingEditProducts = false;
+        state.errorEditData = action?.error?.message;
+      })
+      .addCase(removeDataFromCart.fulfilled, (state, action) => {
+        state.cartData = action.payload;
+        state.isLoadingEditProducts = false;
+        state.errorEditData = false;
+      })
+      .addCase(removeDataFromCart.pending, (state, action) => {
+        state.isLoadingEditProducts = true;
+      })
+      .addCase(removeDataFromCart.rejected, (state, action) => {
+        state.isLoadingEditProducts = false;
+        state.errorEditData = action?.error?.message;
+      });
   },
 });
-
-export const { removeFromCartDrawer,addToCartDrawer,setOpenDrawer, addToCart } = cartSlice.actions;
+export const { setOpenDrawer } = cartSlice.actions;
 export const cartReducer = cartSlice.reducer;

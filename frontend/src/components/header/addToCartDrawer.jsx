@@ -4,30 +4,47 @@ import {
   DeleteOutlined,
   UpCircleFilled,
 } from "@ant-design/icons";
-import { Button, Modal, InputNumber } from "antd";
+import { Button, Modal, InputNumber, message } from "antd";
 import { useContext, useEffect, useState } from "react";
 
 import "../../App.css";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  addToCartDrawer,
-  removeFromCartDrawer,
-} from "../../store/cart/cart.reducer";
+
 import { selectCartItems } from "../../store/cart/cart.selectors";
+import {
+  addDataToCart,
+  removeDataFromCart,
+} from "../../store/cart/cart.actions";
 function AddToCartDrawer({ quantity, item }) {
   const dispatch = useDispatch();
   const [value, setValue] = useState(quantity);
   const cartData = useSelector(selectCartItems);
-
+  const [messageApi, contextHolder] = message.useMessage();
   const increment = () => {
     if (value !== 10) {
       setValue(value + 1);
-      dispatch(addToCartDrawer({ item: item, value: value }));
+      dispatch(
+        addDataToCart({
+          cartData: cartData,
+          item: item,
+          value: 1,
+          selectedSize: item.attributes.sizes[0],
+          selectedColor: item.attributes.colors[0],
+          messageApi: messageApi,
+        })
+      );
     }
   };
   const decrement = () => {
     setValue(value - 1);
-    dispatch(removeFromCartDrawer({ item: item, value: value }));
+    dispatch(
+      removeDataFromCart({
+        cartData: cartData,
+        item: item,
+        value: value,
+        messageApi: messageApi,
+      })
+    );
   };
   useEffect(() => {
     setValue(quantity);
@@ -70,6 +87,7 @@ function AddToCartDrawer({ quantity, item }) {
           style={{ fontSize: "18px", color: "black", fontWeight: "bolder" }}
         />
       </button>
+      {contextHolder}
     </div>
   );
 }

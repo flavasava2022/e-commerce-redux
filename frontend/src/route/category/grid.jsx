@@ -15,9 +15,9 @@ function GridNumber({ gridColumns, isSelected, onGridChange }) {
         return (
           <div
             key={index}
-            className={`transition-colors		 flex w-[6px]  h-[20px] bg-[#6895D2]  ${
+            className={`transition-colors		 flex w-[4px]  h-[20px] bg-[#6895D2]  ${
               !isSelected ? "bg-gray-400" : "bg-[#6895D2]"
-            } rounded-md`}
+            } `}
           ></div>
         );
       })}

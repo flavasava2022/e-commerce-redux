@@ -64,6 +64,12 @@
       "target": "plugin::users-permissions.role",
       "inversedBy": "users",
       "configurable": false
+    },
+    "shoppingCart": {
+      "type": "biginteger"
+    },
+    "wishlistCart": {
+      "type": "biginteger"
     }
   }
 }

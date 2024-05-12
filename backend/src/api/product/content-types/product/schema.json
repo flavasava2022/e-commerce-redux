@@ -46,8 +46,13 @@
     "sizes": {
       "type": "json"
     },
-    "flash_sale": {
-      "type": "boolean"
+    "onSale": {
+      "type": "boolean",
+      "default": false
+    },
+    "trends": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

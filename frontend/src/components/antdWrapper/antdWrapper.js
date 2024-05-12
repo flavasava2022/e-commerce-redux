@@ -1,10 +1,13 @@
-import { ConfigProvider } from "antd";
+import { Affix, ConfigProvider } from "antd";
 
 import { MobileHandlerProvider } from "../../context/mobileHandlerProvider";
 import App from "../../App";
 import { Provider } from "react-redux";
 import { persistor, store } from "../../store/store";
 import { PersistGate } from "redux-persist/integration/react";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+
 
 const AntdWrapper = () => {
   //   const { i18n } = useTranslation();
@@ -40,9 +43,8 @@ const AntdWrapper = () => {
     >
       <Provider store={store}>
         {/* <PersistGate persistor={persistor}> */}
-        <MobileHandlerProvider>
-          <App />
-        </MobileHandlerProvider>
+        <App />
+
         {/* </PersistGate> */}
       </Provider>
     </ConfigProvider>

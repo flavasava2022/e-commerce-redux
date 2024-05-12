@@ -1,18 +1,18 @@
-import { Button, Collapse, Modal, Rate } from "antd";
+import { Button, Collapse, Modal, Rate, message } from "antd";
 
-import { FilterFilled, HeartFilled, UpCircleFilled } from "@ant-design/icons";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AddToCartInputNumber from "../addToCartInputNumber/addToCartInputNumber";
 
 import ColorBox from "./colorbox";
 import SizeBox from "./sizeBox";
 import { useDispatch, useSelector } from "react-redux";
-import { compareListData } from "../../store/compare/compare.selectors";
-import { addOrRemoveDataFromCompareList } from "../../store/compare/compare.reducer";
+
 import { WishListData } from "../../store/wishlist/wishlist.selectors";
-import { addOrRemoveDataFromWishList } from "../../store/wishlist/wishlist.reducer";
-import { addToCart } from "../../store/cart/cart.reducer";
 import { FaHeart } from "react-icons/fa";
+import { addDataToCart } from "../../store/cart/cart.actions";
+import { selectCartItems } from "../../store/cart/cart.selectors";
+import { setOpenDrawer } from "../../store/cart/cart.reducer";
+import { addOrRemoveDataFromWishListHelper } from "../../store/wishlist/wishlist.actions";
 
 function QuickViewModal({ item, setIsModalOpen, isModalOpen, id }) {
   const [value, setValue] = useState(1);
@@ -29,21 +29,17 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen, id }) {
     setValue(1);
   };
   const dispatch = useDispatch();
-  const compareData = useSelector(compareListData);
   const wishlistData = useSelector(WishListData);
+  const cartData = useSelector(selectCartItems);
 
-  const [compare, setCompare] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
   const [wishlist, setWishlist] = useState(false);
   useEffect(() => {
-    const itemCompered = compareData.find((element) => element?.id === id);
-    if (itemCompered) {
-      setCompare(true);
-    }
-    const itemWishList = wishlistData.find((element) => element?.id === id);
+    const itemWishList = wishlistData?.find((element) => element?.id === id);
     if (itemWishList) {
       setWishlist(true);
     }
-  }, [item]);
+  }, [item, wishlistData, id]);
   const modalStyles = {
     header: {
       borderLeft: `5px solid black`,
@@ -88,11 +84,11 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen, id }) {
         <div className="w-[40%] min-h-[100%] max-h-[100%]  ">
           <img
             src={
-              `http://localhost:1337` +
+              process.env.REACT_APP_IMAGE_BASE_URL +
               item?.attributes?.images?.data[0]?.attributes?.url
             }
             alt=""
-            className="w-[100%] h-[100%] object-cover"
+            className="w-[100%] h-[100%] object-fill"
           />
         </div>
         <div className="px-4 py-2 w-[60%] flex flex-col h-[100%] gap-5 justify-between">
@@ -113,7 +109,13 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen, id }) {
               style={{ color: wishlist ? "#D04848" : "grey", fontSize: "23px" }}
               onClick={() => {
                 setWishlist(!wishlist);
-                dispatch(addOrRemoveDataFromWishList(item));
+                dispatch(
+                  addOrRemoveDataFromWishListHelper({
+                    wishlist: wishlistData,
+                    item: item,
+                    messageApi: messageApi,
+                  })
+                );
               }}
               className="icon-com"
             />
@@ -123,12 +125,13 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen, id }) {
               <p className="text-[18px] flex gap-2 items-center capitalize font-bold">
                 Color{" "}
               </p>
-              {item.attributes.colors.map((colorName, i) => {
+              {item?.attributes?.colors?.map((colorName, i) => {
                 return (
                   <ColorBox
                     color={colorName}
                     isSelected={selectedBox === colorName}
                     onClick={() => handleBoxClick(colorName)}
+                    key={i}
                   />
                 );
               })}
@@ -139,12 +142,13 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen, id }) {
               <p className="text-[18px] flex gap-2 items-center capitalize font-bold">
                 Size
               </p>
-              {item.attributes.sizes.map((sizes, i) => {
+              {item?.attributes?.sizes?.map((sizes, i) => {
                 return (
                   <SizeBox
                     text={sizes}
                     isSelected={selectedSize === sizes}
                     onClick={() => handleBoxSizeClick(sizes)}
+                    key={i}
                   />
                 );
               })}
@@ -167,14 +171,25 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen, id }) {
               className=" rounded-full  p-5  h-auto w-[65%] bg-[#F3B95F] "
               type="secondary"
               onClick={() => {
-                dispatch(addToCart({ item: item, value: value }));
+                dispatch(
+                  addDataToCart({
+                    cartData: cartData,
+                    item: item,
+                    value: value,
+                    selectedSize: selectedSize,
+                    selectedColor: selectedBox,
+                    messageApi: messageApi,
+                  })
+                );
                 handleCancel();
+                dispatch(setOpenDrawer(true));
               }}
             >
               ADD TO CART
             </Button>
           </div>
         </div>
+        {contextHolder}
       </div>
     </Modal>
   );

@@ -1,31 +1,18 @@
-import ItemContainer from "../itemContainer/itemContainer";
 import ItemCarousel from "./itemCarousel";
 import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
 import "./carousel.styles.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button, Spin } from "antd";
 import { Link } from "react-router-dom";
-function Carousel({ category, Heading, text }) {
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+import { useFetch } from "../../hooks/useFetch";
+function Carousel({ offer, Heading, text }) {
+  const { loading, data, error } = useFetch(
+    `/products?filters[${offer}][$eq]=true&populate=*`
+  );
 
-  useEffect(() => {
-    const getData = () => {
-      setLoading(true);
-      fetch(
-        `https://fake-e-commerce-api.onrender.com/product/subcategory/${category}`
-      )
-        .then((res) => res.json())
-        .then((json) => {
-          setData(json);
-          setLoading(false);
-        });
-    };
-    getData();
-  }, [category]);
   const [movement, setMovement] = useState(0);
-  const end = Number((data.length - 5) * -258);
-  const start = Number(data.length * 258);
+  const end = Number((data.length - 6) * -250);
+  const start = Number(data.length * 250);
   const leftArrow = () => {
     if (movement === 0) {
       setMovement(end);
@@ -34,7 +21,7 @@ function Carousel({ category, Heading, text }) {
         setMovement(0);
       } else {
         setMovement((pervState) => {
-          return pervState + 258;
+          return pervState + 250;
         });
       }
     }
@@ -47,14 +34,14 @@ function Carousel({ category, Heading, text }) {
         setMovement(0);
       } else {
         setMovement((pervState) => {
-          return pervState - 258;
+          return pervState - 250;
         });
       }
     }
   };
   return (
     <div className="mb-8">
-      <div className=" relative  h-[50vh] rounded-lg overflow-hidden w-[100%] hide_scroll">
+      <div className=" relative  h-[30rem] rounded-lg overflow-hidden w-[100%] hide_scroll">
         <div className="flex items-center gap-2">
           <div className="w-[20px] h-[35px] bg-[#6895D2]  rounded-md"></div>
           <p className=" text-xl font-semibold text-[#6895D2]">{Heading}</p>
@@ -79,27 +66,33 @@ function Carousel({ category, Heading, text }) {
           </div>
         ) : (
           <>
-            <div
-              className={` absolute  items-center  justify-center flex gap-2   carousel h-[40vh] px-2`}
-              style={{ left: `${movement}px` }}
-            >
-              {data.map((item) => {
-                return (
-                  <ItemCarousel
-                    item={item}
-                    key={item?._id}
-                    className="w-[25%]"
-                  />
-                );
-              })}
-            </div>
+            {error ? (
+              <div className="mx-auto h-[25rem] flex items-center justify-center">
+                Failed to Fetch Data
+              </div>
+            ) : (
+              <div
+                className={` absolute  items-center  justify-center flex gap-2   carousel h-[25rem] px-2`}
+                style={{ left: `${movement}px` }}
+              >
+                {data.map((item) => {
+                  return (
+                    <ItemCarousel
+                      item={item}
+                      key={item?.id}
+                      className="w-[25%]"
+                    />
+                  );
+                })}
+              </div>
+            )}
           </>
         )}
       </div>
-      <Link to={`/subCategories/${category}`}>
+      <Link to={`/products?${offer}=true`} unstable_viewTransition>
         <Button
           type="primary"
-          className="w-[10vw] p-4 h-[5vh]  flex items-center justify-center rounded-full mx-auto mt-2"
+          className="w-[10rem] p-4 h-[5vh]  flex items-center justify-center rounded-full mx-auto mt-2"
         >
           View All Products
         </Button>
