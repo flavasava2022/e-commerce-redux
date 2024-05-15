@@ -1,10 +1,11 @@
 import { useSelector } from "react-redux";
 import {
   cartTotalPrice,
+  loadingAddToCart,
   selectCartItems,
 } from "../../store/cart/cart.selectors";
 import AddToCartDrawer from "../../components/header/addToCartDrawer";
-import { Button, Divider, Empty, Table } from "antd";
+import { Button, Divider, Empty, Spin, Table } from "antd";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
@@ -12,6 +13,7 @@ import { useMediaQuery } from "react-responsive";
 function Checkout() {
   const cartData = useSelector(selectCartItems);
   const cartTotal = useSelector(cartTotalPrice);
+  const loadingAddToCartBTN = useSelector(loadingAddToCart);
   const [tableData, setTableData] = useState([]);
   const isDesktopOrLaptop = useMediaQuery({
     query: "(min-width: 1024px)",
@@ -27,10 +29,7 @@ function Checkout() {
             Product: (
               <div className="flex items-center justify-between gap-4">
                 <img
-                  src={
-                    process.env.REACT_APP_IMAGE_BASE_URL +
-                    item?.attributes?.images?.data[0]?.attributes?.url
-                  }
+                  src={item?.attributes?.images?.data[0]?.attributes?.url}
                   alt=""
                   className="w-[90px] h-[90px]   object-scale-down rounded-2xl"
                 />
@@ -43,13 +42,11 @@ function Checkout() {
               </p>
             ),
             Quantity: (
-              <div className="w-auto max-w-[180px] mx-auto">
-                <AddToCartDrawer
-                  quantity={item?.quantity}
-                  item={item}
-                  key={`${item?.id} cart`}
-                />
-              </div>
+              <AddToCartDrawer
+                quantity={item?.quantity}
+                item={item}
+                key={`${item?.id} cart`}
+              />
             ),
             Subtotal: (
               <p className="flex items-center justify-center w-full">
@@ -61,7 +58,7 @@ function Checkout() {
       });
     });
   }, [cartData]);
-  console.log(cartData);
+
   const columns = [
     {
       title: <p className="text-center">Product</p>,
@@ -79,6 +76,12 @@ function Checkout() {
       dataIndex: "Quantity",
       key: "Quantity",
       className: "max-w-[200px]",
+      render: (text, record, index) => (
+        <div className="flex items-center justify-center w-full gap-4 ">
+          <div className="w-[180px]">{text}</div>
+          {loadingAddToCartBTN ? <Spin /> : ""}
+        </div>
+      ),
     },
     {
       title: <p className="text-center">Subtotal</p>,
@@ -88,8 +91,8 @@ function Checkout() {
   ];
   return (
     <div
-      className={`flex items-start justify-between gap-4   ${
-        isDesktopOrLaptop ? "min-h-[80vh] mt-4" : "flex-col"
+      className={`flex items-start justify-between gap-4  mt-4   ${
+        isDesktopOrLaptop ? "" : "flex-col"
       }`}
     >
       <div className={`${isDesktopOrLaptop ? "w-[75%]" : "w-full"}`}>
@@ -103,7 +106,7 @@ function Checkout() {
             size="small"
           />
         ) : (
-          <div className="max-h-[20rem] overflow-auto">
+          <div className="max-h-[22rem] lg:max-h-[20rem] overflow-auto">
             {cartData?.length ? (
               cartData?.map((item) => {
                 return (
@@ -111,10 +114,7 @@ function Checkout() {
                     <div className="p-2 flex  items-center  justify-between gap-3  w-full">
                       <div className="w-[100px] h-[120px] ">
                         <img
-                          src={
-                            process.env.REACT_APP_IMAGE_BASE_URL +
-                            item?.attributes?.images.data[0].attributes.url
-                          }
+                          src={item?.attributes?.images.data[0].attributes.url}
                           alt={item?.attributes?.name}
                           className="w-[100%] h-[100%] object-cover"
                         />
@@ -131,13 +131,15 @@ function Checkout() {
                           <p className="flex items-center border-2 border-dashed border-[#6895D2] rounded-lg min-w-fit font-medium p-2 text-[#6895D2] text-[12px] !leading-none ">
                             $ {item?.attributes?.price}
                           </p>
-
-                          <div className="w-[180px]">
-                            <AddToCartDrawer
-                              quantity={item?.quantity}
-                              item={item}
-                              key={`${item?.id} cart`}
-                            />
+                          <div className="flex items-center justify-center w-full">
+                            <div className="w-[180px] mx-auto">
+                              <AddToCartDrawer
+                                quantity={item?.quantity}
+                                item={item}
+                                key={`${item?.id} cart`}
+                              />
+                            </div>
+                            {loadingAddToCartBTN ? <Spin /> : ""}
                           </div>
                         </div>
                       </div>
@@ -156,7 +158,7 @@ function Checkout() {
       </div>
       <div
         className={`border-2 border-[#6895D2] ${
-          isDesktopOrLaptop ? "w-[20%] min-w-[250px]" : "w-full mb-20"
+          isDesktopOrLaptop ? "w-[20%] min-w-[250px]" : "w-full"
         }  p-4 flex flex-col gap-4 rounded-xl`}
       >
         <p className=" text-xl font-semibold text-[#6895D2]">Cart Total</p>

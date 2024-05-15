@@ -14,7 +14,7 @@ function HeroSection() {
   };
 
   return (
-    <div className="flex items-center h-[15rem] lg:h-[30rem] mt-4 w-full">
+    <div className="flex items-center h-[10rem] lg:h-[30rem] mt-4 w-full">
       <div className=" relative   flex items-center h-[15rem] lg:h-[30rem] rounded-xl w-[100%] justify-center">
         <div className="absolute flex items-center justify-between gap-4 bottom-[20%] mx-auto z-50 ">
           <span
@@ -36,12 +36,12 @@ function HeroSection() {
             onClick={() => changePic(2)}
           ></span>
         </div>
-        <div className=" relative flex overflow-hidden  w-full h-[15rem] lg:h-[30rem] rounded-xl  justify-center">
+        <div className=" relative flex overflow-hidden  w-full h-[10rem] lg:h-[30rem] rounded-xl  justify-center">
           <div
-            className={`absolute   w-[100%] h-[15rem] lg:h-[30rem] picHolder rounded-xl`}
+            className={`absolute   w-[100%] h-[10rem] lg:h-[30rem] picHolder rounded-xl`}
             style={{
               transform: `translateY(-${
-                currentSlide * (isDesktopOrLaptop ? 30 : 15)
+                currentSlide * (isDesktopOrLaptop ? 30 : 10)
               }rem`,
             }}
           >

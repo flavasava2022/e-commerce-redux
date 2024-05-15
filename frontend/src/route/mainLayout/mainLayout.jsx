@@ -20,16 +20,16 @@ function ScrollToTop() {
 
   return null;
 }
-function MainLayout() {
+export default function MainLayout() {
   const isDesktopOrLaptop = useMediaQuery({
     query: "(min-width: 1024px)",
   });
 
   return (
-    <Layout className=" relative scrollbar  min-h-[100vh] bg-white">
+    <Layout className=" relative scrollbar  min-h-[100vh] bg-white mb-[4rem] lg:mb-0">
       <ScrollToTop />
       {!isDesktopOrLaptop ? (
-        <div className="shadow-inner fixed bottom-0 w-full p-5 flex gap-4 text-xl items-center justify-evenly bg-white z-30">
+        <div className="shadow-inner fixed bottom-0 w-full p-5 flex gap-4 text-xl items-center justify-evenly bg-white z-30 h-[4rem]">
           <LoginPopup />
           <WishlistBtn />
           <ShoppingCart />
@@ -52,5 +52,3 @@ function MainLayout() {
     </Layout>
   );
 }
-
-export default MainLayout;

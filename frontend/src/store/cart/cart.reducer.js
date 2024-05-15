@@ -36,9 +36,10 @@ export const cartSlice = createSlice({
         state.isLoadingEditProducts = true;
       })
       .addCase(addDataToCart.fulfilled, (state, action) => {
-        state.cartData = action?.payload;
-        state.isLoadingEditProducts = false;
+                state.isLoadingEditProducts = false;
         state.errorEditData = false;
+        state.cartData = action?.payload;
+
       })
       .addCase(addDataToCart.rejected, (state, action) => {
         state.isLoadingEditProducts = false;

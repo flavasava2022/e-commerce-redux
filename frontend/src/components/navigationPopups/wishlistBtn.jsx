@@ -44,7 +44,6 @@ function WishlistBtn() {
                           {" "}
                           <img
                             src={
-                              process.env.REACT_APP_IMAGE_BASE_URL +
                               item?.attributes?.images.data[0].attributes.url
                             }
                             alt={item?.attributes?.name}
@@ -128,10 +127,7 @@ function WishlistBtn() {
                       <div className=" w-[80px] h-[60px]">
                         {" "}
                         <img
-                          src={
-                            process.env.REACT_APP_IMAGE_BASE_URL +
-                            item?.attributes?.images.data[0].attributes.url
-                          }
+                          src={item?.attributes?.images.data[0].attributes.url}
                           alt={item?.attributes?.name}
                           className="w-[100%] h-[100%] object-cover"
                         />

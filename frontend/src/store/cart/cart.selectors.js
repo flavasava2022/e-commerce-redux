@@ -20,3 +20,5 @@ export const isOpenDrawer = createSelector([selectCartReducer],(cart)=>cart.open
       (total, cartItem) => total + cartItem?.quantity ,
       0
     ))
+
+    export const loadingAddToCart = createSelector([selectCartReducer],(cart)=>cart.isLoadingEditProducts)

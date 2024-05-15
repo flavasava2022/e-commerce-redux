@@ -53,7 +53,7 @@ const createWishlistCart = async (user_id) => {
   const jwt = localStorage.getItem("jwt");
   try {
     const response = await axios.post(
-      `http://localhost:1337/api/wishlists`,
+      `${process.env.REACT_APP_BASE_URL}/wishlists`,
       {
         data: {
           data: [],
@@ -77,7 +77,7 @@ const createShoppingCart = async (user_id) => {
   const jwt = localStorage.getItem("jwt");
   try {
     const response = await axios.post(
-      `http://localhost:1337/api/carts`,
+      `${process.env.REACT_APP_BASE_URL}/carts`,
       {
         data: {
           data: [],
@@ -102,7 +102,7 @@ const updateUserData = async (user_id, shoppingCart, wishlistCart) => {
   const jwt = localStorage.getItem("jwt");
   try {
     const response = await axios.put(
-      `http://localhost:1337/api/users/${user_id}`,
+      `${process.env.REACT_APP_BASE_URL}/users/${user_id}`,
       {
         wishlistCart: Number(wishlistCart),
         shoppingCart: Number(shoppingCart),

@@ -9,7 +9,7 @@ export const getWishlistData = createAsyncThunk(
     if (jwt) {
       try {
         const response = await axios.get(
-          `http://localhost:1337/api/wishlists/${user?.wishlistCart}?populate=*`,
+          `${process.env.REACT_APP_BASE_URL}/wishlists/${user?.wishlistCart}?populate=*`,
 
           {
             headers: {
@@ -48,7 +48,7 @@ export const addOrRemoveDataFromWishListHelper = createAsyncThunk(
 
       try {
         const response = await axios.put(
-          `http://localhost:1337/api/wishlists/${user?.wishlistCart}`,
+          `${process.env.REACT_APP_BASE_URL}/wishlists/${user?.wishlistCart}`,
           {
             data: {
               data: data,

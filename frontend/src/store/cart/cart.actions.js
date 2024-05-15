@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { useSelector } from "react-redux";
-import { selectCartItems } from "./cart.selectors";
+
 
 export const getCartData = createAsyncThunk("GET_CART_DATA", async (user) => {
   const jwt = localStorage.getItem("jwt");
@@ -9,7 +8,7 @@ export const getCartData = createAsyncThunk("GET_CART_DATA", async (user) => {
   if (jwt) {
     try {
       const response = await axios.get(
-        `http://localhost:1337/api/carts/${user?.shoppingCart}?populate=*`,
+        `${process.env.REACT_APP_BASE_URL}/carts/${user?.shoppingCart}?populate=*`,
 
         {
           headers: {
@@ -78,7 +77,7 @@ export const addDataToCart = createAsyncThunk(
 
       try {
         const response = await axios.put(
-          `http://localhost:1337/api/carts/${user?.shoppingCart}`,
+          `${process.env.REACT_APP_BASE_URL}/carts/${user?.shoppingCart}`,
           {
             data: {
               data: data,
@@ -141,7 +140,7 @@ export const removeDataFromCart = createAsyncThunk(
 
       try {
         const response = await axios.put(
-          `http://localhost:1337/api/carts/${user?.shoppingCart}`,
+          `${process.env.REACT_APP_BASE_URL}/carts/${user?.shoppingCart}`,
           {
             data: {
               data: data,

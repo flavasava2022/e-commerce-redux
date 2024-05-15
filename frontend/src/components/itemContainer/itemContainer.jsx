@@ -8,7 +8,10 @@ import {
 import { useEffect, useState } from "react";
 import QuickViewModal from "../quickViewModal/quickViewModal";
 
-import { selectCartItems } from "../../store/cart/cart.selectors";
+import {
+  loadingAddToCart,
+  selectCartItems,
+} from "../../store/cart/cart.selectors";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -18,6 +21,7 @@ import { addOrRemoveDataFromWishListHelper } from "../../store/wishlist/wishlist
 import { addDataToCart } from "../../store/cart/cart.actions";
 import { Link } from "react-router-dom";
 import { setOpenDrawer } from "../../store/cart/cart.reducer";
+import { useMediaQuery } from "react-responsive";
 
 function ItemContainer({ item, id }) {
   const dispatch = useDispatch();
@@ -27,10 +31,13 @@ function ItemContainer({ item, id }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [wishlist, setWishlist] = useState(false);
+  const loadingAddToCartBTN = useSelector(loadingAddToCart);
   useEffect(() => {
     const itemWishList = wishlistData.find((element) => element?.id === id);
     if (itemWishList) {
       setWishlist(true);
+    } else {
+      setWishlist(false);
     }
   }, [item, wishlistData, id]);
   const showModal = (event) => {
@@ -47,9 +54,10 @@ function ItemContainer({ item, id }) {
         messageApi: messageApi,
       })
     );
-    dispatch(setOpenDrawer(true));
   };
-
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-width: 1024px)",
+  });
   return (
     <>
       <Link
@@ -59,10 +67,7 @@ function ItemContainer({ item, id }) {
         <div className="main-container relative bg-white p-6 text-center overflow-hidden shadow-inner	border-1 min-w-[200px]   h-[420px] rounded-3xl flex flex-col items-center gap-4 border-2 border-grey cursor-pointer">
           <div className="w-[95%] min-h-[70%] max-h-[70%]  rounded-3xl">
             <img
-              src={
-                process.env.REACT_APP_IMAGE_BASE_URL +
-                item?.attributes?.images?.data[0]?.attributes?.url
-              }
+              src={item?.attributes?.images?.data[0]?.attributes?.url}
               alt=""
               className="w-[100%] h-[100%] rounded-3xl  object-scale-down"
             />
@@ -86,26 +91,31 @@ function ItemContainer({ item, id }) {
               />
             </div>
             <div className="flex-col flex w-full items-center gap-2 bottom-[-200px] absolute btns-container">
+              {isDesktopOrLaptop ? (
+                <Button
+                  onClick={showModal}
+                  className="quick-view-btn relative w-[60%] p-4 h-[50px] rounded-full "
+                >
+                  <p className="quick-view-btn-text  w-full h-full opacity-1 items-center justify-center">
+                    Quick View
+                  </p>
+                  <div className="quick-view-btn-logo  w-full h-full opacity-0 items-center justify-center ">
+                    <EyeOutlined style={{ fontSize: "24px" }} />
+                  </div>
+                </Button>
+              ) : (
+                ""
+              )}
               <Button
-                onClick={showModal}
-                className="quick-view-btn relative w-[60%] p-4 h-[50px] rounded-full "
-              >
-                <p className="quick-view-btn-text  w-full h-full opacity-1 items-center justify-center">
-                  Quick View
-                </p>
-                <div className="quick-view-btn-logo  w-full h-full opacity-0 items-center justify-center ">
-                  <EyeOutlined style={{ fontSize: "24px" }} />
-                </div>
-              </Button>
-              <Button
+                loading={loadingAddToCartBTN}
                 type="primary"
                 onClick={addToCartHandelr}
-                className="addToCart-btn relative w-[60%] p-4 h-[50px] rounded-full mb-6"
+                className="addToCart-btn relative w-[60%] p-4 h-[50px] rounded-full mb-6 flex  items-center justify-between"
               >
-                <p className="addToCart-btn-text  w-full h-full opacity-1 items-center justify-center">
+                <p className="addToCart-btn-text  w-full h-full flex items-center justify-center text-center">
                   add To Cart
                 </p>
-                <div className="addToCart-btn-logo w-full h-full opacity-0 items-center justify-center">
+                <div className="addToCart-btn-logo w-full h-full hidden items-center justify-center">
                   <ShoppingCartOutlined style={{ fontSize: "24px" }} />
                 </div>
               </Button>

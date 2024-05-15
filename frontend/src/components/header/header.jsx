@@ -16,7 +16,6 @@ function Header() {
   // mobile Version
   const [openDrawer, setOpenDrawer] = useState(false);
   const location = useLocation();
-  console.log("location", location);
   const showDrawer = () => {
     setOpenDrawer(true);
   };
@@ -38,8 +37,8 @@ function Header() {
           className: "header-menu",
         },
         {
-          label: "Contact",
-          key: "contact",
+          label: "Products",
+          key: "products",
           style: { fontSize: "18px" },
           className: "header-menu",
         },
@@ -64,8 +63,8 @@ function Header() {
           className: "header-menu",
         },
         {
-          label: "Contact",
-          key: "contact",
+          label: "Products",
+          key: "products",
           style: { fontSize: "18px" },
           className: "header-menu",
         },
@@ -86,14 +85,8 @@ function Header() {
           style: { margin: "15px 0px" },
         },
         {
-          label: "Login / Register",
-          key: "Login / Register",
-          className: "header-menu",
-          style: { fontSize: "18px" },
-        },
-        {
           label: "Cart",
-          key: "Cart",
+          key: "checkout",
           className: "header-menu",
           style: { fontSize: "18px" },
         },
@@ -103,12 +96,7 @@ function Header() {
           className: "header-menu",
           style: { fontSize: "18px" },
         },
-        {
-          label: "Compare",
-          key: "Compare",
-          className: "header-menu",
-          style: { fontSize: "18px" },
-        },
+
         {
           type: "divider",
           style: { margin: "15px 0px" },
@@ -126,7 +114,7 @@ function Header() {
 
   return (
     <>
-      <Header className="flex items-center justify-between text-white bg-[#FFFFFF] px-[5%] h-[8vh]  sticky-header">
+      <Header className="flex items-center justify-between text-white bg-[#FFFFFF] px-[5%]  h-[8vh]  sticky-header">
         <div className="flex items-center justify-between gap-2">
           <Link to={"/"}>
             <img
@@ -147,13 +135,13 @@ function Header() {
                 location?.pathname === "/"
                   ? ["home"]
                   : [
-                      items.find(
-                        (data) =>
-                          data?.key ===
+                      items.find((data) =>
+                        data?.key.includes(
                           location?.pathname.substring(
                             1,
                             location?.pathname?.length
                           )
+                        )
                       )?.key,
                     ]
               }
@@ -186,10 +174,24 @@ function Header() {
                 className="bg-transparent border-none w-full"
                 style={{ borderInline: "0px" }}
                 onClick={onClick}
+                selectedKeys={
+                  location?.pathname === "/"
+                    ? ["home"]
+                    : [
+                        items.find((data) =>
+                          data?.key.includes(
+                            location?.pathname.substring(
+                              1,
+                              location?.pathname?.length
+                            )
+                          )
+                        )?.key,
+                      ]
+                }
               />
 
-              <div className="w-[90%] mx-auto flex flex-col gap-2">
-                <h1 className="w-full  text-xl font-semibold">Support</h1>
+              <div className="w-[95%] mx-auto flex flex-col gap-2">
+                <h1 className="w-full  text-xl ">Support</h1>
                 <p className="w-full  text-base ">exclusive@gmail.com</p>
                 <p className="w-full  text-base ">+xxxxx-xxxxx-xxxxx</p>
               </div>

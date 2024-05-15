@@ -1,4 +1,4 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, notification } from "antd";
 import signUpPic from "../../assets/6310507.jpg";
 
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
@@ -7,11 +7,15 @@ import { setCurrentUser } from "../../store/user/user.reducer";
 import { useDispatch } from "react-redux";
 import { signUp } from "../../utils/strapi/strapi";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 function Signup() {
+  const [loading, setLoading] = useState(false);
+  const [api, contextHolder] = notification.useNotification();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const onFinish = async (values) => {
     if (values.password === values.ConfirmPass) {
+      setLoading(true);
       let email = values.email;
       let password = values.password;
       let displayName = values.username;
@@ -19,9 +23,15 @@ function Signup() {
         const user = await signUp(email, password, displayName);
         dispatch(setCurrentUser(user));
         navigate("/");
-        console.log(user);
+        setLoading(false);
       } catch (error) {
         console.log(error.response?.data?.error?.message || error.message);
+        api["error"]({
+          message: "Signup UnSuccessful",
+          description: error.response?.data?.error?.message || error.message,
+          placement: "top",
+        });
+        setLoading(false);
       }
     } else {
       console.log("error");
@@ -32,12 +42,16 @@ function Signup() {
     console.log("Failed:", errorInfo);
   };
   return (
-    <div className="flex items-center justify-start gap-6 h-[80vh] ">
-      <div className="w-[60%]">
-        <img src={signUpPic} alt="" className="w-full object-cover" />
+    <div className="flex items-center justify-evenly gap-6 h-[80vh] ">
+      <div className="w-[60%] h-[60vh] hidden lg:block">
+        <img
+          src={signUpPic}
+          alt=""
+          className="w-full object-cover max-h-full"
+        />
       </div>
-      <div className=" flex flex-col   h-full justify-center gap-2">
-        <h1 className="text-[32px] font-semibold text-[#6895D2]">
+      <div className=" flex flex-col   h-full justify-center items-center lg:items-start gap-2 w-full lg:w-[38%]">
+        <h1 className="text-[32px] font-semibold text-[#6895D2] text-center lg:text-start lg:w-full">
           Create an account
         </h1>
 
@@ -48,7 +62,7 @@ function Signup() {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
             layout="vertical"
-            className="flex flex-col gap-2 w-[400px] mt-4"
+            className="flex flex-col gap-2 w-[250px] lg:w-[400px] mt-4"
           >
             <Form.Item
               label="Name"
@@ -121,6 +135,7 @@ function Signup() {
             <div className="flex flex-col gap-4 mt-4 items-center w-full">
               <Form.Item className="m-0 w-full">
                 <Button
+                  loading={loading}
                   type="primary"
                   htmlType="submit"
                   className="w-full rounded-full p-4 h-auto flex items-center justify-center text-base"
@@ -132,6 +147,7 @@ function Signup() {
           </Form>
         </div>
       </div>
+      {contextHolder}
     </div>
   );
 }

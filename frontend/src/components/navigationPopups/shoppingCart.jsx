@@ -1,11 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Drawer, Badge, Empty, Button, Divider } from "antd";
+import { Drawer, Badge, Empty, Button, Divider, Spin } from "antd";
 
 import AddToCartDrawer from "../header/addToCartDrawer";
 import {
   cartTotalCount,
   cartTotalPrice,
   isOpenDrawer,
+  loadingAddToCart,
   selectCartItems,
 } from "../../store/cart/cart.selectors";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,7 +20,7 @@ function ShoppingCart() {
   const totalPrice = useSelector(cartTotalPrice);
   const totalCount = useSelector(cartTotalCount);
   const dispatch = useDispatch();
-
+  const loadingAddToCartBTN = useSelector(loadingAddToCart);
   return (
     <>
       <Badge
@@ -53,10 +54,7 @@ function ShoppingCart() {
                     <div className="p-2 flex  items-center  justify-between gap-3  w-full">
                       <div className="w-[100px] h-[120px] ">
                         <img
-                          src={
-                            process.env.REACT_APP_IMAGE_BASE_URL +
-                            item?.attributes?.images.data[0].attributes.url
-                          }
+                          src={item?.attributes?.images.data[0].attributes.url}
                           alt={item?.attributes?.name}
                           className="w-[100%] h-[100%] object-cover"
                         />
@@ -72,12 +70,13 @@ function ShoppingCart() {
                             $ {item?.attributes?.price}
                           </p>
                         </div>
-                        <div className="flex items-center justify-center w-full">
+                        <div className="flex items-center justify-center w-full gap-4">
                           <AddToCartDrawer
                             quantity={item?.quantity}
                             item={item}
                             key={`${item?.id} cart`}
                           />
+                          {loadingAddToCartBTN ? <Spin /> : ""}
                         </div>
                       </div>
                     </div>

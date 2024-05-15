@@ -83,10 +83,7 @@ function QuickViewModal({ item, setIsModalOpen, isModalOpen, id }) {
       <div className="flex justify-between py-4  gap-8 max-h-[100%] min-h-[100%]">
         <div className="w-[40%] min-h-[100%] max-h-[100%]  ">
           <img
-            src={
-              process.env.REACT_APP_IMAGE_BASE_URL +
-              item?.attributes?.images?.data[0]?.attributes?.url
-            }
+            src={item?.attributes?.images?.data[0]?.attributes?.url}
             alt=""
             className="w-[100%] h-[100%] object-fill"
           />

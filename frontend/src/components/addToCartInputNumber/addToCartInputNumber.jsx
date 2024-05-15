@@ -1,11 +1,6 @@
-import {
-  MinusOutlined,
-  PlusOutlined,
-  DeleteOutlined,
-  UpCircleFilled,
-} from "@ant-design/icons";
-import { Button, Modal, InputNumber } from "antd";
-import { useState } from "react";
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
+import { InputNumber } from "antd";
+
 function AddToCartInputNumber({ value, setValue }) {
   const increment = () => {
     if (value !== 10) {
@@ -22,6 +17,7 @@ function AddToCartInputNumber({ value, setValue }) {
       <button
         onClick={decrement}
         // style={{ border: "none" }}
+
         className="flex items-center justify-center  p-2 rounded-full	text-white bg-[white]"
       >
         <MinusOutlined

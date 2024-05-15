@@ -10,8 +10,6 @@ import { useFetch } from "../../hooks/useFetch";
 import { FaFilter } from "react-icons/fa";
 function Category() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const params = Object.fromEntries(searchParams);
-  console.log(params);
   const queryString = Array.from(searchParams.entries())
     .map(([key, value]) => {
       switch (key) {
@@ -75,7 +73,10 @@ function Category() {
     setPaginatedItems(
       filteredItems?.slice(
         (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
+        currentPage *
+          (itemsPerPage >= filteredItems?.length
+            ? filteredItems?.length
+            : itemsPerPage)
       )
     );
   }, [
@@ -86,7 +87,6 @@ function Category() {
     filterMinPrice,
     filterName,
   ]);
-
   const onGridChange = (value) => {
     setGridValue(value);
   };
@@ -99,9 +99,7 @@ function Category() {
   };
   return (
     <div className="flex items-start justify-start gap-2 flex-col w-full mx-auto  my-4 min-h-[80vh] mt-8">
-      {loading ? (
-        <Spin size="large" />
-      ) : error ? (
+      {error ? (
         <p>Failed to Fetch Data</p>
       ) : (
         <div className="w-full flex flex-col items-center gap-2 justify-between p-2 ">
@@ -136,9 +134,13 @@ function Category() {
               />
             </div>
             <Select
-              defaultValue={"name:asc"}
+              defaultValue={
+                searchParams.get("sort") === null
+                  ? ["name:asc"]
+                  : [searchParams.get("sort")]
+              }
               style={{
-                width: 120,
+                width: 160,
               }}
               onChange={handleSortChange}
               options={[
@@ -151,25 +153,32 @@ function Category() {
                   value: "name:desc",
                 },
                 {
-                  label: "low to high",
+                  label: "Price low to high",
                   value: "price:asc",
                 },
                 {
-                  label: "high to low",
+                  label: "Price high to low",
                   value: "price:desc",
                 },
               ]}
             />
           </div>
-          <div
-            className=" ease-in duration-500 grid items-center  justify-center   gap-6 itemsContainer w-full my-4"
-            style={{ gridTemplateColumns: `repeat(${gridValue}, 1fr)` }}
-          >
-            {/* Render paginated items */}
-            {paginatedItems?.map((item, index) => (
-              <ItemContainer item={item} key={item.id} id={item.id} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="w-full min-h-[80vh] flex items-center justify-center">
+              <Spin size="large" />
+            </div>
+          ) : (
+            <div
+              className=" ease-in duration-500 grid items-center  justify-center   gap-6 itemsContainer w-full my-4"
+              style={{ gridTemplateColumns: `repeat(${gridValue}, 1fr)` }}
+            >
+              {/* Render paginated items */}
+              {paginatedItems?.map((item, index) => (
+                <ItemContainer item={item} key={item.id} id={item.id} />
+              ))}
+            </div>
+          )}
+
           <Pagination
             defaultCurrent={1}
             total={data?.length}

@@ -20,6 +20,7 @@ import { getWishlistData } from "../../store/wishlist/wishlist.actions";
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 function LoginPopup() {
+  const [loading, setLoading] = useState(false);
   const isDesktopOrLaptop = useMediaQuery({
     query: "(min-width: 1024px)",
   });
@@ -35,6 +36,7 @@ function LoginPopup() {
 
   const dispatch = useDispatch();
   const onFinish = async (values) => {
+    setLoading(true);
     let email = values.email;
     let password = values.password;
     try {
@@ -45,8 +47,14 @@ function LoginPopup() {
         description: `Welcome Back, ${user.username}`,
         placement: "top",
       });
+      setLoading(false);
     } catch (error) {
-      console.log(error.response?.data?.error?.message || error.message);
+      api["error"]({
+        message: "Login UnSuccessful",
+        description: error.response?.data?.error?.message || error.message,
+        placement: "top",
+      });
+      setLoading(false);
     }
   };
 
@@ -309,6 +317,7 @@ function LoginPopup() {
                     <div className="flex flex-col gap-4 mt-2 items-center w-full">
                       <Form.Item className="m-0 w-full">
                         <Button
+                          loading={loading}
                           type="primary"
                           htmlType="submit"
                           className="font-semibold w-[100%] rounded-full p-3 h-auto flex items-center justify-center text-base"
