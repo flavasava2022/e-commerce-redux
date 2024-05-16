@@ -13,11 +13,9 @@ function AddToCartInputNumber({ value, setValue }) {
     }
   };
   return (
-    <div className="flex rounded-full p-3 bg-[#6895D2] h-auto w-[35%] justify-between">
+    <div className="flex rounded-full p-3 bg-[#6895D2] h-auto w-full justify-between">
       <button
         onClick={decrement}
-        // style={{ border: "none" }}
-
         className="flex items-center justify-center  p-2 rounded-full	text-white bg-[white]"
       >
         <MinusOutlined

@@ -1,6 +1,5 @@
 import { Checkbox, Drawer, Input, Switch } from "antd";
 import MultiRangeSlider from "../../components/multiRangePriceSlider/multiRangeSlider";
-import { useSearchParams } from "react-router-dom";
 
 function FilterDrawer({
   onCloseFiterDrawer,

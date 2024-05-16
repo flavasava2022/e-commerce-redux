@@ -1,4 +1,4 @@
-import { Divider, Spin } from "antd";
+import { Divider } from "antd";
 import middlePic from "../../assets/pexels-mstudio-1240892.jpg";
 import fullPic from "../../assets//woman.jpg";
 import halfPic from "../../assets/pexels-dom-j-45982.jpg";

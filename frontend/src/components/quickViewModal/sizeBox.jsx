@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 function SizeBox({ text, isSelected, onClick }) {
   return (
     <div

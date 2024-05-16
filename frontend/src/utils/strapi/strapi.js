@@ -12,7 +12,6 @@ export const login = async (email, password) => {
     );
     // Handle success.
     const { jwt, user } = response.data;
-    console.log(user);
     localStorage.setItem("jwt", jwt);
     localStorage.setItem("user", JSON.stringify(user));
     return user;
@@ -66,7 +65,6 @@ const createWishlistCart = async (user_id) => {
         },
       }
     );
-    console.log(response.data.data.id);
     return response.data.data.id;
   } catch (error) {
     // Handle error.
@@ -90,7 +88,6 @@ const createShoppingCart = async (user_id) => {
         },
       }
     );
-    console.log(response.data.data.id);
     return response.data.data.id;
   } catch (error) {
     // Handle error.
@@ -113,7 +110,6 @@ const updateUserData = async (user_id, shoppingCart, wishlistCart) => {
         },
       }
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
     // Handle error.

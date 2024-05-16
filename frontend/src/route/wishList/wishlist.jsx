@@ -1,18 +1,7 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ItemContainer from "../../components/itemContainer/itemContainer";
-import {
-  Drawer,
-  Empty,
-  Input,
-  InputNumber,
-  Pagination,
-  Select,
-  Spin,
-} from "antd";
+import { Empty, Pagination, Spin } from "antd";
 import GridNumber from "../category/grid";
-import FilterDrawer from "../category/filterDrawer";
-import { FilterFilled } from "@ant-design/icons";
-import { useParams } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 import { WishListData } from "../../store/wishlist/wishlist.selectors";
@@ -25,7 +14,6 @@ function ItemsContainer() {
   const [gridValue, setGridValue] = useState("5");
   const [paginatedItems, setPaginatedItems] = useState([]);
   const wishlistData = useSelector(WishListData);
-  // console.log("wishlistData", wishlistData);
   useEffect(() => {
     setPaginatedItems(
       wishlistData.slice(
@@ -34,7 +22,6 @@ function ItemsContainer() {
       )
     );
   }, [wishlistData, currentPage, itemsPerPage]);
-  // console.log("categoryFilter", categoryFilter);
   const onGridChange = (value) => {
     setGridValue(value);
   };
@@ -48,19 +35,48 @@ function ItemsContainer() {
           <div className="w-full flex items-center justify-center">
             <div className="flex items-center justify-between gap-2">
               <GridNumber
+                gridColumns={"1"}
+                isSelected={gridValue === "1"}
+                onGridChange={() => onGridChange("1")}
+                minWidth={1}
+                maxWidth={600}
+                setGridValue={setGridValue}
+              />
+
+              <GridNumber
+                gridColumns={"2"}
+                isSelected={gridValue === "2"}
+                onGridChange={() => onGridChange("2")}
+                minWidth={601}
+                maxWidth={890}
+                setGridValue={setGridValue}
+              />
+
+              <GridNumber
                 gridColumns={"3"}
                 isSelected={gridValue === "3"}
                 onGridChange={() => onGridChange("3")}
+                minWidth={891}
+                maxWidth={1200}
+                setGridValue={setGridValue}
               />
+
               <GridNumber
                 gridColumns={"4"}
                 isSelected={gridValue === "4"}
                 onGridChange={() => onGridChange("4")}
+                minWidth={1201}
+                maxWidth={1535}
+                setGridValue={setGridValue}
               />
+
               <GridNumber
                 gridColumns={"5"}
                 isSelected={gridValue === "5"}
                 onGridChange={() => onGridChange("5")}
+                minWidth={1536}
+                maxWidth={5000}
+                setGridValue={setGridValue}
               />
             </div>
           </div>

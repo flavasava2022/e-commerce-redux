@@ -2,13 +2,18 @@ import { useEffect, useState } from "react";
 
 import { Pagination, Select, Spin } from "antd";
 import GridNumber from "./grid";
-import { FilterFilled } from "@ant-design/icons";
-import { useNavigate, useSearchParams } from "react-router-dom";
+
+import { useSearchParams } from "react-router-dom";
 import ItemContainer from "../../components/itemContainer/itemContainer";
 import FilterDrawer from "./filterDrawer";
 import { useFetch } from "../../hooks/useFetch";
 import { FaFilter } from "react-icons/fa";
+import { useMediaQuery } from "react-responsive";
 function Category() {
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-width: 1024px)",
+  });
+
   const [searchParams, setSearchParams] = useSearchParams();
   const queryString = Array.from(searchParams.entries())
     .map(([key, value]) => {
@@ -97,6 +102,7 @@ function Category() {
       return prevParams;
     });
   };
+
   return (
     <div className="flex items-start justify-start gap-2 flex-col w-full mx-auto  my-4 min-h-[80vh] mt-8">
       {error ? (
@@ -113,24 +119,48 @@ function Category() {
             </div>
             <div className="flex items-center justify-between gap-2">
               <GridNumber
+                gridColumns={"1"}
+                isSelected={gridValue === "1"}
+                onGridChange={() => onGridChange("1")}
+                minWidth={1}
+                maxWidth={600}
+                setGridValue={setGridValue}
+              />
+
+              <GridNumber
                 gridColumns={"2"}
                 isSelected={gridValue === "2"}
                 onGridChange={() => onGridChange("2")}
+                minWidth={601}
+                maxWidth={890}
+                setGridValue={setGridValue}
               />
+
               <GridNumber
                 gridColumns={"3"}
                 isSelected={gridValue === "3"}
                 onGridChange={() => onGridChange("3")}
+                minWidth={891}
+                maxWidth={1200}
+                setGridValue={setGridValue}
               />
+
               <GridNumber
                 gridColumns={"4"}
                 isSelected={gridValue === "4"}
                 onGridChange={() => onGridChange("4")}
+                minWidth={1201}
+                maxWidth={1535}
+                setGridValue={setGridValue}
               />
+
               <GridNumber
                 gridColumns={"5"}
                 isSelected={gridValue === "5"}
                 onGridChange={() => onGridChange("5")}
+                minWidth={1536}
+                maxWidth={5000}
+                setGridValue={setGridValue}
               />
             </div>
             <Select
@@ -185,7 +215,8 @@ function Category() {
             onChange={(page) => setCurrentPage(page)}
             hideOnSinglePage={true}
             className="mt-4"
-            size="large"
+            size={isDesktopOrLaptop ? "large" : "small"}
+            showSizeChanger={false}
           />
         </div>
       )}

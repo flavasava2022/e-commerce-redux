@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Drawer, Badge, Empty, Button, Divider, Spin } from "antd";
 
 import AddToCartDrawer from "../header/addToCartDrawer";

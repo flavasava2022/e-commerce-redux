@@ -11,7 +11,7 @@ import {
 
 import { useSelector, useDispatch } from "react-redux";
 import { WishListData } from "../../store/wishlist/wishlist.selectors";
-import { setOpenDrawer } from "../../store/cart/cart.reducer";
+
 import { addDataToCart } from "../../store/cart/cart.actions";
 import { Link } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
@@ -34,7 +34,7 @@ function ItemCarousel({ item }) {
     }
   }, [item, wishlistData]);
   const showModal = (event) => {
-    event.preventDefault(); // Prevent the default behavior of the link
+    event.preventDefault();
     setIsModalOpen(true);
   };
   const isDesktopOrLaptop = useMediaQuery({
@@ -74,7 +74,7 @@ function ItemCarousel({ item }) {
               type="primary"
               loading={loadingAddToCartBTN}
               onClick={(event) => {
-                event.preventDefault(); // Prevent the default behavior of the link
+                event.preventDefault();
                 dispatch(
                   addDataToCart({
                     cartData: cartData,

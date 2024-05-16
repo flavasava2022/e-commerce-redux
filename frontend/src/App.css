@@ -5,10 +5,10 @@
 *{
     box-sizing: border-box;
     scroll-behavior: smooth !important;
+        font-family: "Poppins", sans-serif !important;
 }
-html{
-    font-family: "Poppins", sans-serif !important;
-}
+
+
 
 .Input-Number input{
     text-align: center !important;

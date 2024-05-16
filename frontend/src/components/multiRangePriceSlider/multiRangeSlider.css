@@ -35,8 +35,7 @@
 
 .slider__left-value,
 .slider__right-value {
-  /* color: #dee2e6;
-    font-size: 12px; */
+
   margin-top: 20px;
 }
 
@@ -50,7 +49,7 @@
   transition: 0.3s ease-in;
 }
 
-/* Removing the default appearance */
+
 .thumb,
 .thumb::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -73,7 +72,7 @@
   z-index: 4;
 }
 
-/* For Chrome browsers */
+
 .thumb::-webkit-slider-thumb {
   background-color: #f1f5f7;
   border: none;
@@ -87,7 +86,7 @@
   position: relative;
 }
 
-/* For Firefox browsers */
+
 .thumb::-moz-range-thumb {
   background-color: #f1f5f7;
   border: none;

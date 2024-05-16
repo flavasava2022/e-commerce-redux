@@ -61,7 +61,7 @@ function LoginPopup() {
   const handleLogout = () => {
     localStorage.removeItem("jwt");
     localStorage.removeItem("user");
-    dispatch(setCurrentUser(null)); // Reset user state
+    dispatch(setCurrentUser(null));
     dispatch(getCartData());
     dispatch(getWishlistData());
     api["success"]({

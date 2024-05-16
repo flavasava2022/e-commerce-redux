@@ -4,16 +4,13 @@ import logo from "../../assets/MainLogo.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import WishlistBtn from "../navigationPopups/wishlistBtn";
 import ShoppingCart from "../navigationPopups/shoppingCart";
-
-import { signOutUser } from "../../utils/firebase/firebase";
 import LoginPopup from "../navigationPopups/loginPopup";
 import { useMediaQuery } from "react-responsive";
-import HeaderMobile from "./headerMobile/headerMobile";
+
 import { useState } from "react";
 import { FaBars } from "react-icons/fa";
 
 function Header() {
-  // mobile Version
   const [openDrawer, setOpenDrawer] = useState(false);
   const location = useLocation();
   const showDrawer = () => {
@@ -25,7 +22,6 @@ function Header() {
   const isDesktopOrLaptop = useMediaQuery({
     query: "(min-width: 1024px)",
   });
-  const { pathname } = useLocation();
   const navigate = useNavigate();
   const { Header } = Layout;
   const items = isDesktopOrLaptop
@@ -103,9 +99,7 @@ function Header() {
         },
       ];
 
-  // console.log(isDesktopOrLaptop);
   const onClick = (e) => {
-    // console.log("click ", e.key);
     navigate(`/${e.key === "home" ? "" : e.key}`);
     if (!isDesktopOrLaptop) {
       setOpenDrawer(false);
@@ -178,9 +172,9 @@ function Header() {
                   location?.pathname === "/"
                     ? ["home"]
                     : [
-                        items.find((data) =>
-                          data?.key.includes(
-                            location?.pathname.substring(
+                        items?.find((data) =>
+                          data?.key?.includes(
+                            location?.pathname?.substring(
                               1,
                               location?.pathname?.length
                             )

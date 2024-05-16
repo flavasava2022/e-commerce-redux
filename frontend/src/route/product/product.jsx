@@ -2,19 +2,19 @@ import { useParams } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
 import { useEffect, useState } from "react";
 import { Button, Collapse, Rate, Spin, message } from "antd";
-import { FaHeart, FaShuttleVan } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { WishListData } from "../../store/wishlist/wishlist.selectors";
 import {
   loadingAddToCart,
   selectCartItems,
 } from "../../store/cart/cart.selectors";
-import { addOrRemoveDataFromWishList } from "../../store/wishlist/wishlist.reducer";
+
 import ColorBox from "../../components/quickViewModal/colorbox";
 import SizeBox from "../../components/quickViewModal/sizeBox";
 import AddToCartInputNumber from "../../components/addToCartInputNumber/addToCartInputNumber";
 import { addDataToCart } from "../../store/cart/cart.actions";
-import { PiVanLight } from "react-icons/pi";
+
 import Carousel from "../../components/carousel/carsousel";
 import { addOrRemoveDataFromWishListHelper } from "../../store/wishlist/wishlist.actions";
 
@@ -273,14 +273,14 @@ function Product() {
                       width: "100%",
                     }}
                   />
-                  <div className="flex items-center justify-evenly gap-1 w-full mb-0 mt-auto">
+                  <div className="flex flex-col lg:flex-row items-center justify-evenly gap-2 w-full mb-0 mt-auto">
                     <AddToCartInputNumber
                       value={value}
                       setValue={setValue}
-                      className=""
+                      className="w-full"
                     />
                     <Button
-                      className=" rounded-full  p-5  h-auto w-[65%] bg-[#F3B95F] "
+                      className=" rounded-full  p-5  h-auto w-full bg-[#F3B95F] "
                       loading={loadingAddToCartBTN}
                       type="secondary"
                       onClick={() => {

@@ -20,7 +20,6 @@ import { WishListData } from "../../store/wishlist/wishlist.selectors";
 import { addOrRemoveDataFromWishListHelper } from "../../store/wishlist/wishlist.actions";
 import { addDataToCart } from "../../store/cart/cart.actions";
 import { Link } from "react-router-dom";
-import { setOpenDrawer } from "../../store/cart/cart.reducer";
 import { useMediaQuery } from "react-responsive";
 
 function ItemContainer({ item, id }) {

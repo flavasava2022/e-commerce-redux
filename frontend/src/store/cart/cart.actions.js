@@ -99,7 +99,6 @@ export const addDataToCart = createAsyncThunk(
           return response?.data?.data?.attributes?.data;
         } else return response;
       } catch (error) {
-        console.log(error);
         messageApi.open({
           type: "error",
           content: error?.message,

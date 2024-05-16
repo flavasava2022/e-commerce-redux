@@ -1,11 +1,6 @@
-import {
-  MinusOutlined,
-  PlusOutlined,
-  DeleteOutlined,
-  UpCircleFilled,
-} from "@ant-design/icons";
-import { Button, Modal, InputNumber, message } from "antd";
-import { useContext, useEffect, useState } from "react";
+import { MinusOutlined, PlusOutlined, DeleteOutlined } from "@ant-design/icons";
+import { InputNumber, message } from "antd";
+import { useEffect, useState } from "react";
 
 import "../../App.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -53,7 +48,6 @@ function AddToCartDrawer({ quantity, item }) {
     <div className="flex rounded-full p-3 bg-[#6895D2] h-auto  justify-between w-[100%]">
       <button
         onClick={decrement}
-        // style={{ border: "none" }}
         className="flex items-center justify-center  p-2 rounded-full	text-white bg-[white]"
       >
         {value === 1 ? (

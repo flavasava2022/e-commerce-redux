@@ -25,7 +25,6 @@ function Signup() {
         navigate("/");
         setLoading(false);
       } catch (error) {
-        console.log(error.response?.data?.error?.message || error.message);
         api["error"]({
           message: "Signup UnSuccessful",
           description: error.response?.data?.error?.message || error.message,
@@ -34,13 +33,14 @@ function Signup() {
         setLoading(false);
       }
     } else {
-      console.log("error");
+      api["error"]({
+        message: "Auth problem",
+        description: "password doesn't match",
+        placement: "top",
+      });
     }
-    // console.log("Success:", values);
   };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
+  const onFinishFailed = (errorInfo) => {};
   return (
     <div className="flex items-center justify-evenly gap-6 h-[80vh] ">
       <div className="w-[60%] h-[60vh] hidden lg:block">
